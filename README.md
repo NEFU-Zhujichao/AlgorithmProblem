@@ -1,6 +1,6 @@
-# 算法题
+# 算法题(牛客网高频TOP200)
 
-### [找出数组中第K大的数](https://www.nowcoder.com/practice/e016ad9b7f0b45048c58a9f27ba618bf?tpId=117&tqId=37791&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+### [NC88寻找第K大](https://www.nowcoder.com/practice/e016ad9b7f0b45048c58a9f27ba618bf?tpId=117&tqId=37791&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 - 思路：快排，n-K即为第K大的数(正向排序)
 ```java
 import java.util.*;
@@ -29,6 +29,22 @@ public class Solution {
         int temp = arr[i];
         arr[i] = arr[j];
         arr[j] = temp;
+    }
+}
+```
+### [NC78反转链表](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=117&tqId=37777&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+- 思路：p -> head.next,head.next -> pre,pre -> head, head -> p;
+```java
+public class Solution {
+    public ListNode ReverseList(ListNode head) {
+        ListNode pre = null,p = null;
+        while(head != null){
+            p = head.next;
+            head.next = pre;
+            pre = head;
+            head = p;
+        }
+        return pre;
     }
 }
 ```
