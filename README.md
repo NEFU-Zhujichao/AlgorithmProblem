@@ -48,3 +48,20 @@ public class Solution {
     }
 }
 ```
+### [NC105二分查找](https://www.nowcoder.com/practice/7bc4a1c7c371425d9faa9d1b511fe193?tpId=117&tqId=37829&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+- 思路：二分查找
+```java
+public class Solution {
+    public int upper_bound_ (int n, int v, int[] a) {
+        // write code here
+        if(a[n-1] < v) return n+1;
+        int left = 0,right = n -1;
+        while(left < right){
+            int mid = left + (right - left) / 2;
+            if (a[mid] >= v)right = mid;
+            else left = mid + 1;
+        }
+        return left + 1;
+    }
+}
+```
