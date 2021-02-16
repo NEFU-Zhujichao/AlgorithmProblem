@@ -102,3 +102,20 @@ public class Solution {
     }
 }
 ```
+### [NC4判断链表中是否有环](https://www.nowcoder.com/practice/650474f313294468a4ded3ce0f7898b9?tpId=117&tqId=37714&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+- 思路：定义两个快慢指针，如果有环这两个指针一定会相遇。
+```java
+public class Solution {
+    public boolean hasCycle(ListNode head) {
+        ListNode p = head,q = head;
+        while(p != null && q.next != null && q.next.next != null){
+            p = p.next;
+            q = q.next.next;
+            if(p == q){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+```
