@@ -119,3 +119,20 @@ public class Solution {
     }
 }
 ```
+### [NC32求平方根](https://www.nowcoder.com/practice/09fbfb16140b40499951f55113f2166c?tpId=117&tqId=37734&rp=1&ru=%2Fta%2Fjob-code-high&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+- 思路：二分查找 注意：Long转int 防止溢出
+```java
+public class Solution {
+    public int sqrt (int x) {
+        if (x <= 0) return 0;
+        int left = 1,right = x;
+        while(left < right){
+            Long mid = left + (right - left) / 2L;
+            if (mid * mid <= x && (mid + 1) * (mid + 1) > x)return Integer.parseInt(String.valueOf(mid));
+            if(mid * mid > x) right = Integer.parseInt(String.valueOf(mid));
+            else left = Integer.parseInt(String.valueOf(mid)) + 1;
+        }
+        return left;
+    }
+}
+```
