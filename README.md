@@ -12,15 +12,15 @@ public class Solution {
         // write code here
         quickSort(a, 0, n - 1);
 
-        return a[K - 1];
+        return a[n - K];
     }
 
     private void quickSort(int[] a, int left, int right) {
         if (left >= right) return;
         int mid = a[left], i = left, j = right;
         while (i < j) {
-            while (i < j && a[j] <= mid) j--;
-            while (i < j && a[i] > mid) i++;
+            while (i < j && a[j] > mid) j--;
+            while (i < j && a[i] <= mid) i++;
             swap(a, i, j);
         }
         //下标，最左面数的下标！！！left！！！
