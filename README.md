@@ -19,8 +19,8 @@ public class Solution {
         if (left >= right) return;
         int mid = a[left], i = left, j = right;
         while (i < j) {
-            while (i < j && a[j] > mid) j--;
-            while (i < j && a[i] <= mid) i++;
+            while (i < j && a[j] > mid) j--;  //while (i < j && a[j] < mid) j--;   逆向排序
+            while (i < j && a[i] <= mid) i++; //while (i < j && a[i] >= mid) i++;
             swap(a, i, j);
         }
         //下标，最左面数的下标！！！left！！！
@@ -40,7 +40,7 @@ public class Solution {
 ### [NC78反转链表](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=117&tqId=37777&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 
 - 思路：p -> head.next,head.next -> pre,pre -> head, head -> p;
-
+- 链表的尾插法
 ```java
 public class Solution {
     public ListNode ReverseList(ListNode head) {
@@ -55,7 +55,35 @@ public class Solution {
     }
 }
 ```
-
+### [NC50链表中的节点每k个一组翻转](https://www.nowcoder.com/practice/b49c3dc907814e9bbfa8437c251b028e?tpId=117&tqId=37746&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+- 思路：![链表头插法](https://uploadfiles.nowcoder.com/images/20200929/249586134_1601375359555_EE54FEDE4D1EA710514C806FC06BEB38)
+```java
+public class Solution {
+    public ListNode reverseKGroup (ListNode head, int k) {
+        // write code here
+        if(head == null || head.next == null || k == 1) return head;
+        ListNode  p = new ListNode(0);
+        p.next = head;
+        ListNode cur = head,pre = p,temp = null;
+        int length = 0;
+        while(head != null){
+            length++;
+            head = head.next;
+        }
+        for(int i = 0;i < length / k;i++){
+            for(int j = 0;j < k-1;j++){
+                temp = cur.next;
+                cur.next = temp.next;
+                temp.next = pre.next;
+                pre.next = temp;
+            }
+            pre = cur;
+            cur = cur.next;
+        }
+        return p.next;
+    }
+}
+```
 ### [NC105二分查找](https://www.nowcoder.com/practice/7bc4a1c7c371425d9faa9d1b511fe193?tpId=117&tqId=37829&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 
 - 思路：二分查找
