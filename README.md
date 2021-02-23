@@ -164,3 +164,18 @@ public class Solution {
     }
 }
 ```
+### [NC7股票(一次交易)](https://www.nowcoder.com/practice/64b4262d4e6d4f6181cd45446a5821ec?tpId=188&tqId=37524&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey)
+- 思路：因为一定需要先买入再卖出，因此每到一步都可以获取到这一步为止的最佳状态，不断这个最佳状态即可。
+```java
+public class Solution {
+    public int maxProfit (int[] prices) {
+        // write code here
+        int max = 0,minVal = prices[0];
+        for(int i = 1;i < prices.length;i++){
+            if(prices[i] < minVal)minVal = prices[i];
+                max = Math.max(max,prices[i] - minVal);
+        }
+        return max;
+    }
+}
+```
