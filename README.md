@@ -179,3 +179,44 @@ public class Solution {
     }
 }
 ```
+### [NC 合并区间](https://www.nowcoder.com/practice/69f4e5b7ad284a478777cb2a17fb5e6a?tpId=117&tqId=691&tab=answerKey)
+- 思路：先按左区间从小到大排序，若左区间相等则按有区间从大到小排序，然后从第二个开始遍历。
+- 排序方法：lambda表达式自定义排序。
+```java
+(a,b) -> {
+  if(a.start != b.start) return a.start - b.start;
+  else return b.end - a.end;
+  });
+```
+```java
+import java.util.*;
+/**
+ * Definition for an interval.
+ * public class Interval {
+ *     int start;
+ *     int end;
+ *     Interval() { start = 0; end = 0; }
+ *     Interval(int s, int e) { start = s; end = e; }
+ * }
+ */
+public class Solution {
+    public ArrayList<Interval> merge(ArrayList<Interval> intervals) {
+        if (intervals == null || intervals.size() < 2){
+            return intervals;
+        }
+        ArrayList<Interval> res = new ArrayList<Interval>();
+        Collections.sort(intervals, (a,b) -> {
+            if(a.start != b.start) return a.start - b.start;
+            else return b.end - a.end;
+        });
+        res.add(intervals.get(0));
+        for(int i = 1;i < intervals.size();i++){
+            if(intervals.get(i).start == res.get(res.size()-1).start) continue;
+            if(res.get(res.size()-1).end < intervals.get(i).start){
+                res.add(intervals.get(i));
+            }else res.get(res.size()-1).end = Math.max(intervals.get(i).end,res.get(res.size()-1).end);
+        }
+        return res;
+    }
+}
+```
