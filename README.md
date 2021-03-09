@@ -220,3 +220,45 @@ public class Solution {
     }
 }
 ```
+### [NC128容器盛水问题](https://www.nowcoder.com/practice/31c1aed01b394f0b8b7734de0324e00f?tpId=188&tqId=37528&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey)
+- 思路：可以双指针写。但是这里我采取的是评论区令一个老哥的思路。O(2n)的时间复杂度，也还可以。从左到右扫描出第一个比a[left]大的元素，这样中途记录tmp中间值，如果有比a[left]大的值，则这个点就是一个容器的边，sum += tmp,tmp清0继续扫描有没有比
+这个点还大的边。扫描完成后，从右开始向左扫描，扫描出比a[right]大的元素，然后sum+=tmp，过程相同。
+```java
+import java.util.*;
+public class Solution {
+    public long maxWater (int[] arr) {
+        if (arr == null || arr.length == 0) {
+            return 0;
+        }
+        int low = 0;
+        long sum = 0;
+        long tmp = 0;
+        //从左向右
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[low] > arr[i]) {
+                tmp = tmp + arr[low] - arr[i];
+            }
+            if (arr[low] <= arr[i]) {
+                sum = sum + tmp;
+                tmp = 0;
+                low = i;
+            }
+        }
+        low = arr.length-1;
+        tmp = 0;
+        //从右向左
+        for (int j = arr.length-1; j >= 0; j--) {
+            if (arr[low] > arr[j]) {
+                tmp = tmp + arr[low] - arr[j];
+            }
+            //注意这里不能再 <=，否则可能会重复计算等于的情况
+            if (arr[low] < arr[j]) {
+                sum = sum + tmp;
+                tmp = 0;
+                low = j;
+            }
+        }
+        return sum;
+    }
+}
+```
