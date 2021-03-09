@@ -223,6 +223,7 @@ public class Solution {
 ### [NC128容器盛水问题](https://www.nowcoder.com/practice/31c1aed01b394f0b8b7734de0324e00f?tpId=188&tqId=37528&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey)
 - 思路：可以双指针写。但是这里我采取的是评论区令一个老哥的思路。O(2n)的时间复杂度，也还可以。从左到右扫描出第一个比a[left]大的元素，这样中途记录tmp中间值，如果有比a[left]大的值，则这个点就是一个容器的边，sum += tmp,tmp清0继续扫描有没有比
 这个点还大的边。扫描完成后，从右开始向左扫描，扫描出比a[right]大的元素，然后sum+=tmp，过程相同。
+  - 注意：两次扫描只能有一次 <= 因为=可能重复算两次。
 ```java
 import java.util.*;
 public class Solution {
