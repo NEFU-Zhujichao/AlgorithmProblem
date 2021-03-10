@@ -263,3 +263,22 @@ public class Solution {
     }
 }
 ```
+### [NC12重建二叉树](https://www.nowcoder.com/practice/8a19cbe657394eeaac2f6ea9b0f6fcf6?tpId=188&tqId=37520&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey)
+- 思路：一直先序和中序重建二叉树。 Arrays.CopyOfRange() 左闭右开
+- 在中序中找到先序的第一个元素，这样中序左面的就是左子树，中序右面的就是右子树。不断递归寻找。
+```java
+import java.util.*;
+public class Solution {
+    public TreeNode reConstructBinaryTree(int [] pre,int [] in) {
+        if (pre.length == 0 || in.length == 0) return null;
+        TreeNode root = new TreeNode(pre[0]);
+        for(int i = 0;i < in.length;i++){
+            if(in[i] == pre[0]){
+                root.left = reConstructBinaryTree(Arrays.copyOfRange(pre,1,i+1),Arrays.copyOfRange(in,0,i));
+                root.right = reConstructBinaryTree(Arrays.copyOfRange(pre,i+1,pre.length),Arrays.copyOfRange(in,i+1,in.length));
+                }
+        }
+        return root;
+    }
+}
+```

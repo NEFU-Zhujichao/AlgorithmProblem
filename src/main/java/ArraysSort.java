@@ -7,6 +7,6 @@ public class ArraysSort {
         int k = in.nextInt();
         int[] arr = {50,3,5,2,2};
         Arrays.sort(arr,0,5);
-        System.out.println(arr[k-1]);
+
     }
 }
