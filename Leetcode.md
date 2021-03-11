@@ -19,3 +19,18 @@ class Solution {
     }
 }
 ```
+### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
+- 思路：跳就完事了。每次更新能跳到的最远距离。若是此时i大于max则无法到达，若max >= nums.length() - 1则能到达。
+```java
+class Solution {
+    public boolean canJump(int[] nums) {
+        int max = 0;
+        for(int i = 0;i < nums.length;i++){
+            if(i > max) return false;
+            if(max >= nums.length - 1) return true;
+            max = Math.max(max,i + nums[i]);
+        }
+        return false;
+    }
+}
+```
