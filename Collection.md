@@ -1,5 +1,4 @@
 # 集合框架面经总结
-![脑图](https://www.bilibili.com/read/cv6238451?spm_id_from=333.788.b_636f6d6d656e74.6#reply2963501648) 
 ### Collection接口下有List(ArrayList,LinkedList)Set(HashSet)Map(HashMap)
 - ArrayList：底层数据结构为数组，它初始化的时候数据量是0，当你add的时候默认会变成10，它的扩容机制是每次扩容容量是它之前容量的1.5倍，查找访问通过索引下标，速度快，增删元素的效率低，线程不安全。 当遇到线程安全问题时，考虑使用JUC包下的CopyOnWriteArrayList
 - LinkedList： 底层数据结构为双向链表，提供头插和尾插两种方式，适合插入删除频繁的情况下，内部维护了链表的长度。
@@ -31,7 +30,7 @@ transient int modCount;
 ### 线程安全的map有HashTable，或者加Synchronized、Lock，或者Collections.synchronizedMap()，为什么选择用ConcurrentHashMap
 - 并发度更高。普通的HashTable直接对里面的方法加了synchronized对象锁，ConcurrentHashMap在jdk1.8之后底层数据结构也变成了数组加链表加红黑树，它只会锁住目前我在的Node节点的值，在上锁时使用了CAS加synchronized，再加上jdk1.6以后对synchronized进行了锁升级的优化，所以它的效率是更高的。
 ### 锁升级过程
-synchronize锁升级过程：jdk高版本之后对synchronize关键字进行了很多优化，其中一项就是锁升级，以前synchronize默认就是悲观锁，加锁解锁的开销都比较大。所以引入了偏向锁、轻量级锁、重量级锁。
+synchronize锁升级过程：jdk高版本之后对synchronize关键字进行了很多优化，其中一项就是锁升级，以前synchronize默认就是悲观锁，加锁解锁的开销都比较大。所以引入了偏向锁、轻量级锁、重量级锁。 
 CAS：compare and swap。会出现ABA问题，中间有线程快速改过值了但是又改回了原值，一般会像乐观锁一样解决此类问题。
 ![CAS](https://img-blog.csdnimg.cn/20200602171359487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70)
 **偏向锁**：
