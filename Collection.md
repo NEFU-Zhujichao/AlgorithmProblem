@@ -35,4 +35,6 @@ CAS：compare and swap。会出现ABA问题，中间有线程快速改过值了�
 ![CAS](https://img-blog.csdnimg.cn/20200602171359487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70) 
 - **对象头**：synchronized用的锁是存在java对象头mark word里的。其中对象头的最后两位代表是否加锁的标志位，锁标志位如果是01的话需要根据前一位的是否为偏向锁来判断当前的锁状态，如果前一位为0则代表无锁状态，如果为1则代表有偏向锁。后两位：00代表轻量级锁，10代表重量级锁，11代表GC垃圾回收的标记信息。
 - **偏向锁**：当一个线程访问同步块时，会先判断锁标志位是否为01，如果是01，则判断是否为偏向锁，如果是，会先判断当前锁对象头中是否存储了当前的线程id，如果存储了，则直接获得锁。如果对象头中指向不是当前线程id，则通过CAS尝试将自己的线程id存储进当前锁对象的对象头中来获取偏向锁。当cas尝试获取偏向锁成功后则继续执行同步代码块，否则等待安全点的到来撤销原来线程的偏向锁，撤销时需要暂停原持有偏向锁的线程，判断线程是否活动状态，如果已经退出同步代码块则唤醒新的线程开始获取偏向锁，否则开始锁竞争进行锁升级过程，升级为轻量级锁。
-- **轻量级锁**：当出现锁竞争时，会升级为轻量级锁。
+- **轻量级锁**：当出现锁竞争时，会升级为轻量级锁。线程获取轻量级锁时会先把锁对象的对象头MarkWord复制一份到该线程的栈帧中创建的用于存储锁记录的空间(称为DisplacedMarkWord)，然后使用CAS把对象头中的内容替换为线程存储的锁记录（DisplacedMarkWord）的地址。如果成功则当前线程获取锁，如果失败则使用自旋来获取锁。自旋锁简单来说就是让另一条竞争该锁的线程在循环中不断CAS 但是如果自旋的时间太长也不行，因为自旋是要消耗CPU的，因此自旋的次数是有限制的，如果自旋次数到了但是工作线程还没有释放锁，那么这个时候轻量级锁就会膨胀为重量级锁。重量级锁把除了拥有锁的线程都阻塞，防止CPU空转。
+![](https://img-blog.csdnimg.cn/20200603145142474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70)
+- 
