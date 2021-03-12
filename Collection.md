@@ -33,4 +33,4 @@ transient int modCount;
 synchronize锁升级过程：jdk高版本之后对synchronize关键字进行了很多优化，其中一项就是锁升级，以前synchronize默认就是悲观锁，加锁解锁的开销都比较大。所以引入了偏向锁、轻量级锁、重量级锁。 
 CAS：compare and swap。会出现ABA问题，中间有线程快速改过值了但是又改回了原值，一般会像乐观锁一样解决此类问题。
 ![CAS](https://img-blog.csdnimg.cn/20200602171359487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70) 
-**偏向锁**：
+- **偏向锁**：
