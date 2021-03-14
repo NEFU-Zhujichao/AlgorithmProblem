@@ -1,4 +1,6 @@
 # 多线程高频面试考点
+### 怎么保证线程同步
+- [很详细](https://blog.csdn.net/yuqing2015/article/details/82788041?utm_medium=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.baidujs&dist_request_id=1328642.38542.16157091267591879&depth_1-utm_source=distribute.pc_relevant.none-task-blog-BlogCommendFromMachineLearnPai2-1.baidujs)
 ### Volatile关键字的作用和实现
 - 保证可见性
 - 不保证原子性

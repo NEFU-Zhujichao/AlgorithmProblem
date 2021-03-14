@@ -6,6 +6,7 @@ public class ArraysSort {
         int k = in.nextInt();
         int[] arr = {50,3,5,2,2};
         Arrays.sort(arr,0,5);
+        // -127 ~ 128
         Integer v1 = 1;
         Integer v2 = 1;
         Integer v3 = 6666;
