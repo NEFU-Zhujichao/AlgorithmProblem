@@ -34,4 +34,4 @@
     - new ThreadPoolExecutor.AbortPolicy()**默认**  丢弃任务并抛出RejectedExecutionException异常。
     - new ThreadPoolExecutor.CallerRunsPolicy()    由提交任务的当前线程处理。
     - new ThreadPoolExecutor.DiscardPolicy()       悄无声息丢弃任务，但是不抛出异常。
-    - new ThreadPoolExecutor.DiscardOldestPolicy() 悄无声息丢弃最老的任务，也不会抛出异常。 
+    - new ThreadPoolExecutor.DiscardOldestPolicy() 悄无声息丢弃最老的任务，也不会抛出异常。
