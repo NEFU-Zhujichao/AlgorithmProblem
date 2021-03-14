@@ -8,4 +8,5 @@
 - StringBuilder线程不安全。StringBuffer是线程安全的，StringBuffer的方法都是synchronized修饰的。
 - 性能：StringBuilder>StringBuffer>String
 - 场景：优先使用StringBuilder，如果这个字符串作为共享变量在多线程环境下使用时，若要保证结果正确则使用StringBuffer。若字符串不会改动，则使用String。
-### 
+### 双亲委派模型
+![click](C:\Users\13949\Desktop\面试题\双亲委派.png)
