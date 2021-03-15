@@ -9,4 +9,4 @@
 - 性能：StringBuilder>StringBuffer>String
 - 场景：优先使用StringBuilder，如果这个字符串作为共享变量在多线程环境下使用时，若要保证结果正确则使用StringBuffer。若字符串不会改动，则使用String。
 ### 双亲委派模型
-![click](C:\Users\13949\Desktop\面试题\双亲委派.png)
+![click](https://github.com/NEFU-Zhujichao/AlgorithmProblem/blob/master/src/main/resources/img/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE.png)
