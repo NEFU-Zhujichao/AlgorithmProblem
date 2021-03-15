@@ -10,7 +10,7 @@ import java.net.InetSocketAddress;
 public class T1 {
 
     public static void main(String[] arg) throws Exception {
-        HttpServer server = HttpServer.create(new InetSocketAddress(8000), 0);
+        HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
         server.createContext("/add", new TestHandler1());
         server.createContext("/mult", new TestHandler2());
         server.start();
