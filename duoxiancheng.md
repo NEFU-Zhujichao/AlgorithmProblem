@@ -29,9 +29,11 @@
     - BlockingQueue<Runnable> workQueue：阻塞队列。
     - ThreadFactory threadFactory：线程工厂用来创建线程，可以自定义创建的方法。
     - RejectedExecutionHandler handle：拒绝策略。
-    - 当来任务的时候，会使用核心线程来完成任务。当核心线程都在被使用的时候，再来任务将会被放入阻塞队列中等待。当阻塞队列也满了的时候并且核心线程的工作还没有结束将会创建额外的线程直到到达最大线程数。若到达最大线程数还有任务则会触发拒绝策略。
+    - 当来任务的时候，会使用核心线程来完成任务。当核心线程都在被使用的时候，再来任务将会被放入阻塞队列中等待。当阻塞队列也满了的时候并且核心线程的工作还没有结束将会创建临时线程直到到达最大线程数。若到达最大线程数还有任务则会触发拒绝策略。
 - **4种拒绝策略**
     - new ThreadPoolExecutor.AbortPolicy()**默认**  丢弃任务并抛出RejectedExecutionException异常。
     - new ThreadPoolExecutor.CallerRunsPolicy()    由提交任务的当前线程处理。
     - new ThreadPoolExecutor.DiscardPolicy()       悄无声息丢弃任务，但是不抛出异常。
     - new ThreadPoolExecutor.DiscardOldestPolicy() 悄无声息丢弃最老的任务，也不会抛出异常。
+- **为什么先放进阻塞队列而不是先创建最大线程**
+  - 在创建新线程的时候是要获取全局锁的，这个时候其他的线程就得阻塞，影响了整体效率。
