@@ -6,7 +6,7 @@
 - HashMap：1.8 底层数据结构 数组加单链表(红黑树)内部Entry节点改为Node节点存储。当单链表长度 >=8并且hash桶大小大于64时会将单链表转化为红黑树，当红黑树节点个数小于6时退化为链表提高插入删除性能。转移数据操作 = 按旧链表的正序遍历链表、在新链表的尾部依次插入，所以不会出现链表逆序、倒置的情况，故不容易出现环形链表的情况 ，但jdk1.8仍是线程不安全的，因为没有加同步锁保护。
 - 扩容机制：如果在初始化HashMap时没有给定容量，则容量为默认的16。并且默认的负载因子为0.75，扩容的阈值threshold为 负载因子*初始容量(0.75 * 16) 当put操作时，若size > threshold 则会将原来的数据节点扩容为原来的两倍。
 [具体区别](https://blog.csdn.net/sky_xin/article/details/84926333) 
-HashMap允许key和value都是null，但是HashTable不允许。
+- HashMap允许key和value都是null，但是HashTable不允许。
 ```java
 public class Main{
 /**实际存储的key-value键值对的个数*/
