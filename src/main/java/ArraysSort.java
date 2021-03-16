@@ -1,7 +1,9 @@
 import java.util.*;
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
 public class ArraysSort {
+    private volatile int a = 5;
     public static void main(String[] args) {
         Scanner in = new Scanner(System.in);
         int k = in.nextInt();

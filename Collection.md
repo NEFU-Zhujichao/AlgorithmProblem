@@ -25,6 +25,12 @@ final float loadFactor;
 transient int modCount;
 }
 ```
+### 为什么是2的次幂
+[详细](https://blog.csdn.net/sidihuo/article/details/78489820) 
+- 为了提升模运算的计算速度。减少碰撞，或者说为了让HashMap里面元素分布尽量均匀些，应该是哈希算法的功能。
+- HashMap为了存取高效，要尽量较少碰撞，就是要尽量把数据分配均匀，每个链表长度大致相同，这个实现就在把数据存到哪个链表中的算法。
+- 这个算法实际就是取模，hash%length，计算机中直接求余效率不如位移运算，源码中做了优化hash&(length-1)，hash%length==hash&(length-1)的前提是length是2的n次方。
+- 为什么这样能均匀分布减少碰撞呢？2的n次方实际就是1后面n个0，2的n次方-1  实际就是n个1；其实就是按位“与”的时候，每一位都能&1，这样会充分利用到二进制下hash值的后面几位。如果不是2的次幂，这样n-1 的二进制后面一定会有0的位，这样这位与操作之后一定是0，所以数组上的某些位置可能一直得不到利用，数组元素分布不均匀，导致使用效率降低。
 ### 线程安全的map有HashTable，或者加Synchronized、Lock，或者Collections.synchronizedMap()，为什么选择用ConcurrentHashMap
 - 锁粒度小，并发度更高。普通的HashTable直接对里面的方法加了全局的synchronized对象锁，ConcurrentHashMap在jdk1.8之后底层数据结构也变成了数组加链表加红黑树，它只会锁住目前我在的Node节点的值，在上锁时使用了CAS加synchronized，再加上jdk1.6以后对synchronized进行了锁升级的优化，所以它的效率是更高的。
 - HashTable是加全局锁Synchronized，ConcurrentHashMap加的是分段锁。并且ConcurrentHashMap在1.7和1.8有一些改变。  
