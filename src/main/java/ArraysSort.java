@@ -1,6 +1,4 @@
 import java.util.*;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 
 public class ArraysSort {
     private volatile int a = 5;
