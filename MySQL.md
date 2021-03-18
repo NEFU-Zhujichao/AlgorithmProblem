@@ -1,5 +1,6 @@
 # MySQL面经
 ### MySQL执行计划怎么看？
+[click](https://nyimac.gitee.io/2020/08/16/MySQL%E9%AB%98%E7%BA%A7/) 
 ```sql
 explain select * from A where X=? and Y=?
 ```
