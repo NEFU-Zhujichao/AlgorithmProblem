@@ -3,7 +3,7 @@
 ```sql
 explain select * from A where X=? and Y=?
 ```
-- id select _type table partitions type possible_keys key key_len ref rows filtered Extra
+- id select_type table partitions type possible_keys key key_len ref rows filtered Extra
 - Extra：
     - using filesort：表示mysql对结果集进行外部排序，不能通过索引顺序达到排序效果。一般有using filesort都建议优化去掉，因为这样的查询cpu资源消耗大。**意味着没有走索引列的排序。**
     - using index：覆盖索引扫描，表示查询在索引树中就可以查找所需数据，不用扫描表数据文件，往往说明性能不错。
