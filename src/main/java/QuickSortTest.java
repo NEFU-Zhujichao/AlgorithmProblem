@@ -2,6 +2,9 @@ import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
 
+/**
+ * 找出数组中第count小的数
+ */
 public class QuickSortTest {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
