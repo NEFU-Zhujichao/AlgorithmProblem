@@ -114,7 +114,9 @@ public class CGlibProxy {
 |     PROPAGATION_NEVER     |       以非事务方式执行，如果当前存在事务，则抛出异常。       |
 |    PROPAGATION_NESTED     | 如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。 |
 ### Spring 如何解决循环依赖
-- 
+- 三级缓存
+> 循环依赖的本质 Two Sum
+- 先去缓存里找Bean，没有则实例化当前的Bean放到Map，如果有需要依赖当前Bean的，就能从Map取到。
 ### SpringMVC执行流程
 ![SpringMVC执行流程](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcxMTE1MTQxNDIzODAz?x-oss-process=image/format,png) 
 1.用户发起请求到前端控制器（DispatcherServlet），该控制器会过滤出哪些请求可以访问Servlet、哪些不能访问。就是url-pattern的作用，并且会加载springmvc.xml配置文件。
