@@ -282,3 +282,48 @@ public class Solution {
     }
 }
 ```
+### [NC14 二叉树的之字形层序遍历](https://www.nowcoder.com/practice/47e1687126fa461e8a3aff8632aa5559?tpId=188&tqId=38035&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey)
+- 思路：奇数时候正常顺序，偶数时候reverse数组。 Collections.reverse(ans)
+```java
+import java.util.*;
+public class Solution {
+    /**
+     * 
+     * @param root TreeNode类 
+     * @return int整型ArrayList<ArrayList<>>
+     */
+    public ArrayList<ArrayList<Integer>> zigzagLevelOrder (TreeNode root) {
+        // write code here
+        if(root == null) return new ArrayList();
+        Queue<TreeNode> queue = new LinkedList<>();
+        ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+        if(root.left == null && root.right == null){
+            ArrayList<Integer> ans = new ArrayList<>();
+            ans.add(root.val);
+            res.add(ans);
+            return res;
+        }
+        queue.offer(root);
+        int count = 1;
+        while(!queue.isEmpty()){
+            ArrayList<Integer> ans = new ArrayList<>();
+            int size = queue.size();
+            for(int i = 0;i < size;i++){
+                TreeNode tmp = queue.poll();
+                ans.add(tmp.val);
+                if(tmp.left != null) queue.add(tmp.left);
+                if(tmp.right != null) queue.add(tmp.right);
+            }
+            if(count % 2 == 1){
+                res.add(ans);
+                count++;
+            }else{
+                Collections.reverse(ans);
+                res.add(ans);
+                count++;
+            }
+        }
+        return res;
+    }
+}
+```
