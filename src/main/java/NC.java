@@ -1,3 +1,6 @@
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Semaphore;
+
 public class NC {
     public static void main(String[] args) {
         String s = "h i";
@@ -27,5 +30,6 @@ public class NC {
             sb.append(ans[i]);
         }
         System.out.println(sb.toString());
+
     }
 }
