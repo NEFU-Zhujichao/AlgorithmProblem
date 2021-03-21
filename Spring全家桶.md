@@ -1,10 +1,20 @@
 # Spring全家桶面经
+- IOC：控制反转：将对象的创建权，由Spring管理。
+- DI（依赖注入）：在Spring创建对象的过程中，把对象依赖的属性注入到类中。
 [Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142) 
 ![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 ### Spring IOC 初始化流程
 - resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成。
 - beanDefinition载入：BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
 - BeanDefinition注册：即向IOC容器注册这些BeanDefinition， 通过BeanDefinitionRegistry实现。
+### Bean的生命周期
+- 实例化Bean：Ioc容器通过获取BeanDefinition对象中的信息进行实例化，实例化对象被包装在BeanWrapper对象中。
+- 设置对象属性（DI）：通过BeanWrapper提供的设置属性的接口完成属性依赖注入。
+- 注入Aware接口（BeanFactoryAware， 可以用这个方式来获取其它 Bean，ApplicationContextAware）：Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给bean。
+- BeanPostProcessor：自定义的处理（分前置处理和后置处理）。
+- InitializingBean和init-method：执行我们自己定义的初始化方法。
+- 使用。
+- destroy：bean的销毁。
 ### Spring AOP 实现原理
 - AOP：
   - 不同的模块（对象）间有时会出现公共的行为，这种公共的行为很难通过继承的方式来实现，如果用工具类的话也不利于维护，代码也显得异常繁琐。切面（AOP）的引入就是为了解决这类问题而生的，它要达到的效果是保证开发者在不修改源代码的前提下，为系统中不同的业务组件添加某些通用功能。
