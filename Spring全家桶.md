@@ -1,4 +1,6 @@
 # Spring全家桶面经
+[Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142) 
+![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 ### Spring IOC 初始化流程
 - resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成。
 - beanDefinition载入：BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
