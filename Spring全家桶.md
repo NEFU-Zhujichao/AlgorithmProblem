@@ -88,7 +88,6 @@ public class CGlibProxy {
        enhancer.setSuperclass(RealSubject.class);
        //设置回调函数
        enhancer.setCallback(new MyMethodInterceptor());
-
        //这里的creat方法就是正式创建代理类
        RealSubject proxyDog = (RealSubject) enhancer.create();
        //调用代理类的eat方法

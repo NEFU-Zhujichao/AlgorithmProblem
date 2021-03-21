@@ -30,6 +30,5 @@ public class NC {
             sb.append(ans[i]);
         }
         System.out.println(sb.toString());
-
     }
 }
