@@ -1,4 +1,8 @@
 # Spring全家桶面经
+### Spring IOC 初始化流程
+- resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成。
+- beanDefinition载入：BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
+- BeanDefinition注册：即向IOC容器注册这些BeanDefinition， 通过BeanDefinitionRegistry实现。
 ### Spring AOP 实现原理
 - AOP：
   - 不同的模块（对象）间有时会出现公共的行为，这种公共的行为很难通过继承的方式来实现，如果用工具类的话也不利于维护，代码也显得异常繁琐。切面（AOP）的引入就是为了解决这类问题而生的，它要达到的效果是保证开发者在不修改源代码的前提下，为系统中不同的业务组件添加某些通用功能。
