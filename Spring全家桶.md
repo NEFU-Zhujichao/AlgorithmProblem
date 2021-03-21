@@ -1,7 +1,7 @@
 # Spring全家桶面经
 - IOC：控制反转：将对象的创建权，由Spring管理。
-- DI（依赖注入）：在Spring创建对象的过程中，把对象依赖的属性注入到类中。
-[Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142) 
+- DI（依赖注入）：在Spring创建对象的过程中，把对象依赖的属性注入到类中。 
+[Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142)  
 ![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 ### Spring IOC 初始化流程
 - resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成。
