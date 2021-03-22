@@ -327,3 +327,19 @@ public class Solution {
     }
 }
 ```
+### [NC134 股票无限次交易](https://www.nowcoder.com/practice/9e5e3c2603064829b0a0bbfca10594e9?tpId=188&tqId=38042&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey) 
+- 思路：只要是两天之间有上升就加上。
+```java
+import java.util.*;
+public class Solution {
+    public int maxProfit (int[] prices) {
+        if(prices.length <= 1) return 0;
+        int min = prices[0],res = 0;
+        for(int i = 1;i < prices.length;i++){
+            if(prices[i] > min) res += (prices[i]-min);
+            min = prices[i];
+        }
+        return res;
+    }
+}
+```
