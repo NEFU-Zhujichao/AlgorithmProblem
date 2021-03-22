@@ -146,3 +146,10 @@ public class CGlibProxy {
 9. 返回视图对象到前端控制器。
 10. 视图渲染，就是将ModelAndView对象中的数据放到request域中，用来让页面加载数据的。
 11. 通过第8步，通过名称找到了对应的页面，通过第10步，request域中有了所需要的数据，那么就能够进行视图渲染了。最后将其返回即可。
+### Mybatis原理
+- sqlSessionFactoryBuilder加载mybatis核心配置文件生成sqlSessionFactory（单例）
+- 工厂模式生成sqlSession执行sql以及控制事务
+- Mybatis通过动态代理使Mapper（sql映射器）接口能运行起来即为接口生成代理对象将sql查询到结果映射成pojo
+**sqlSessionFactory构建过程：** 
+- 解析并读取配置中的xml创建Configuration对象 （单例）
+- 使用Configuration类r去创建sqlSessionFactory（builder模式）
