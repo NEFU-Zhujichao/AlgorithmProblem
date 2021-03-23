@@ -10,12 +10,20 @@
 - BeanDefinition注册：即向IOC容器注册这些BeanDefinition， 通过BeanDefinitionRegistry实现。
 ### Bean的生命周期
 - 实例化Bean：Ioc容器通过获取BeanDefinition对象中的信息进行实例化，实例化对象被包装在BeanWrapper对象中。
+  - Spring使用BeanDefinition来装载着我们给Bean定义的元数据
+  - 实例化Bean的时候会遍历BeanDefinitionMap
+  - SpringBean的实例化和属性赋值是分两步来做的。
 - 设置对象属性（DI）：通过BeanWrapper提供的设置属性的接口完成属性依赖注入。
 - 注入Aware接口（BeanFactoryAware， 可以用这个方式来获取其它 Bean，ApplicationContextAware）：Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给bean。
 - BeanPostProcessor：自定义的处理（分前置处理和后置处理）。
 - InitializingBean和init-method：执行我们自己定义的初始化方法。
 - 使用。
 - destroy：bean的销毁。
+> **在SpringBean的生命周期，Spring预留了很多的hook给我们去扩展** 
+> 1. Bean实例化之前有BeanFactoryPostProcessor
+> 2. Bean实例化之后，初始化之前，有相关的Aware接口供我们去拿到Context相关信息
+> 3. 环绕着初始化阶段，有BeanPostProcessor(AOP的关键)
+> 4. 在初始化阶段，有各种的init方法供我们去自定义
 ### Spring AOP 实现原理
 - AOP：
   - 不同的模块（对象）间有时会出现公共的行为，这种公共的行为很难通过继承的方式来实现，如果用工具类的话也不利于维护，代码也显得异常繁琐。切面（AOP）的引入就是为了解决这类问题而生的，它要达到的效果是保证开发者在不修改源代码的前提下，为系统中不同的业务组件添加某些通用功能。
