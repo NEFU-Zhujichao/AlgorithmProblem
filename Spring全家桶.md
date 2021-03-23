@@ -145,6 +145,12 @@ public class CGlibProxy {
 |    PROPAGATION_NESTED     | 如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。 |
 ### Spring 如何解决循环依赖
 - 三级缓存
+  - singletonObjects：一级，日常实际获取Bean的地方。
+  - earlySingletonObjects：二级，已实例化，但还没进行属性注入，由三级缓存放进来。
+  - singletonFactory：三级，value是一个对象工厂。
+> **A对象实例化之后，属性注入之前，其实会把A对象放入到三级缓存中。key是BeanName，value是ObjectFactory**
+> **等到A对象属性注入时，发现依赖B，又去实例化B时。B属性注入需要去获取A对象，这里就是从三级缓存中拿出ObjectFactory，从ObjectFactory中得到对应的Bean(就是对象A)**
+> **把三级缓存的A记录干掉，然后放到二级缓存中。显然，二级缓存的key是BeanName，value是Bean(这里的Bean还没做完属性注入的相关工作)。等到完全初始化之后，就会把二级缓存给remove掉，塞到一级缓存中，我们getBean的时候，实际上拿到的是一级缓存的。**
 > 循环依赖的本质 Two Sum
 - 先去缓存里找Bean，没有则实例化当前的Bean放到Map，如果有需要依赖当前Bean的，就能从Map取到。
 ### SpringMVC执行流程
