@@ -42,17 +42,4 @@ transient int modCount;
     - 数据结构：synchronized+CAS+Node+单链表(红黑树)，Node的val和next都用volatile修饰，保证可见性。查找替换赋值都用CAS。
     - 锁：锁定链表的Head节点(jdk1.7锁的是segment，里面有很多的链表)，不影响其他元素的读写，锁粒度更细，效率更高。扩容时，阻塞所有的读写操作，并发扩容。
     - 读操作无锁：Node的val和next都是volatile修饰的，读写线程对该变量互相可见。
-### 锁升级过程
-[讲解的很详细](https://blog.csdn.net/wangyy130/article/details/106495180/) 
-synchronize锁升级过程：jdk高版本之后对synchronize关键字进行了很多优化，其中一项就是锁升级，以前synchronize默认就是悲观锁，加锁解锁的开销都比较大。所以引入了偏向锁、轻量级锁、重量级锁。 synchronized锁有四种状态，无锁，偏向锁，轻量级锁，重量级锁，这几个状态会随着竞争状态逐渐升级，锁可以升级但不能降级，但是偏向锁状态可以被重置为无锁状态。 
-CAS：compare and swap。会出现ABA问题，中间有线程快速改过值了但是又改回了原值，一般会像乐观锁一样解决此类问题。
-![CAS](https://img-blog.csdnimg.cn/20200602171359487.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70) 
-- CAS解决ABA问题：
-  - AtomicMarkableReference：使用boolean变量——表示引用变量是否被更改过,不关心中间变量变化了几次。
-  - AtomicStampedReference：其中的构造方法中initialStamp（时间戳）用来唯一标识引用变量,引用变量中途被更改了几次。
-- **对象头**：synchronized用的锁是存在java对象头mark word里的。其中对象头的最后两位代表是否加锁的标志位，锁标志位如果是01的话需要根据前一位的是否为偏向锁来判断当前的锁状态，如果前一位为0则代表无锁状态，如果为1则代表有偏向锁。后两位：00代表轻量级锁，10代表重量级锁，11代表GC垃圾回收的标记信息。
-- **偏向锁**：当一个线程访问同步块时，会先判断锁标志位是否为01，如果是01，则判断是否为偏向锁，如果是，会先判断当前锁对象头中是否存储了当前的线程id，如果存储了，则直接获得锁。如果对象头中指向不是当前线程id，则通过CAS尝试将自己的线程id存储进当前锁对象的对象头中来获取偏向锁。当cas尝试获取偏向锁成功后则继续执行同步代码块，否则等待安全点的到来撤销原来线程的偏向锁，撤销时需要暂停原持有偏向锁的线程，判断线程是否活动状态，如果已经退出同步代码块则唤醒新的线程开始获取偏向锁，否则开始锁竞争进行锁升级过程，升级为轻量级锁。
-- **轻量级锁**：当出现锁竞争时，会升级为轻量级锁。线程获取轻量级锁时会先把锁对象的对象头MarkWord复制一份到该线程的栈帧中创建的用于存储锁记录的空间(LockRecord)，然后使用CAS把对象头中的内容替换为线程存储的锁记录(LockRecord)的地址。如果成功则当前线程获取锁，如果失败则使用自旋来获取锁。替换成功之后将锁标志位改为00，表示获取轻量级锁成功。lockrecord的作用：在这里实现了锁重入，每当同一个线程多次获取同一个锁时，会在当前栈帧中放入一个lockrecord，但是重入是放入的lockrecord关于锁信息的内容为null，代表锁重入。当轻量级解锁时，每解锁一次则从栈帧中弹出一个lockrecord，直到为0。自旋锁简单来说就是让另一条竞争该锁的线程在循环中不断CAS，但是如果自旋的时间太长也不行，因为自旋是要消耗CPU的，因此自旋的次数是有限制的，如果自旋次数到了但是工作线程还没有释放锁，那么这个时候轻量级锁就会膨胀为重量级锁。重量级锁把除了拥有锁的线程都阻塞，防止CPU空转。
-![](https://img-blog.csdnimg.cn/20200603145142474.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70)
-![](https://img-blog.csdnimg.cn/2020060314564655.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3dhbmd5eTEzMA==,size_16,color_FFFFFF,t_70)
-- **重量级锁**：在重量级锁中将LockRecord对象替换为了monitor对象的实现。主要通过monitorenter和monitorexit两个指令来实现。需要经过系统调用，在并发低的情况下效率会低。重量级锁在进行锁重入的时候每获取到锁一次会对monitor对象中的计数器+1，等锁退出时则会相应的-1，直到减到0为止，锁完全退出。
+
