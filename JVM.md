@@ -12,9 +12,9 @@ JVM调优在堆中调
       - jdk1.8之后：无永久代，常量池在元空间中。
     - 元空间：逻辑上存在，物理上不存在。
 ### GC
-- 初始堆内存大小为10M；最大堆内存大小为10M；
-- -Xms10m -Xmx10m -Xlog:gc*  
+- 初始堆内存大小为10M：默认1/64 最大堆内存大小为10M：默认1/4 
+- -Xms10m -Xmx10m -Xlog:gc*           
 > GC回收在伊甸园区和老年代。新生代分为伊甸园区、幸存区0、幸存区1。
 ### OOM排查
-- VM参数 -Xms10m -Xmx10m -XX:+HeapDumpOnOutOfMemoryError
+- VM参数 -Xms10m -Xmx10m -XX:+HeapDumpOnOutOfMemoryError -Xms10m -Xmx10m -XX:+HeapDumpOnClassNotFoundException
 - 把OOM的文件Dump下来，用Jprofiler分析大对象所在的位置
