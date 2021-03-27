@@ -7,6 +7,7 @@
 - 扩容机制：如果在初始化HashMap时没有给定容量，则容量为默认的16。并且默认的负载因子为0.75，扩容的阈值threshold为 负载因子*初始容量(0.75 * 16) 当put操作时，若size > threshold 则会将原来的数据节点扩容为原来的两倍。
 [具体区别](https://blog.csdn.net/sky_xin/article/details/84926333) 
 - HashMap允许key和value都是null，但是HashTable不允许。
+- 当HashMap的key为自定义的类型时，需要重写hashcode和equals方法。因为默认会调用Object类的方法。
 ```java
 public class Main{
 /**实际存储的key-value键值对的个数*/

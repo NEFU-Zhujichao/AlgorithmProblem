@@ -10,3 +10,6 @@
 - 场景：优先使用StringBuilder，如果这个字符串作为共享变量在多线程环境下使用时，若要保证结果正确则使用StringBuffer。若字符串不会改动，则使用String。
 ### 双亲委派模型
 ![click](https://github.com/NEFU-Zhujichao/AlgorithmProblem/blob/master/src/main/resources/img/%E5%8F%8C%E4%BA%B2%E5%A7%94%E6%B4%BE.png)
+### private的意义是什么
+- private并不是解决安全问题的，如果想让解决代码的安全问题，请用别的办法。
+- private的意义是OOP（面向对象编程）的封装概念。

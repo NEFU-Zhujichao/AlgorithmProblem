@@ -343,3 +343,49 @@ public class Solution {
     }
 }
 ```
+### [NC26 括号生成](https://www.nowcoder.com/practice/c9addb265cdf4cdd92c092c655d164ca?tpId=188&tqId=38081&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high-week%2Fquestion-ranking&tab=answerKey) 
+- 思路：递归先放左 '(' 一直放到不能放，处理全放左括号完事开始处理右括号。
+```java
+import java.util.*;
+public class Solution {
+    private ArrayList<String> res;
+    public ArrayList<String> generateParenthesis (int n) {
+        res = new ArrayList<>();
+        recursion(n,n,"");
+        return res;
+    }
+    private void recursion(int left,int right,String tmp){
+        System.out.println("tmp="+tmp+" ");
+        if(left == 0 && right ==0){
+            res.add(tmp);
+            //System.out.println(tmp);
+        }else {
+            if(left > 0) recursion(left-1,right,tmp+"(");
+            if(right > left) recursion(left,right-1,tmp+")");
+        }
+    }
+}
+/**
+ tmp=( 
+ tmp=(( 
+ tmp=((( 
+ tmp=((() 
+ tmp=((()) 
+ tmp=((())) 
+ tmp=(() 
+ tmp=(()( 
+ tmp=(()() 
+ tmp=(()()) 
+ tmp=(()) 
+ tmp=(())( 
+ tmp=(())() 
+ tmp=() 
+ tmp=()( 
+ tmp=()(( 
+ tmp=()(() 
+ tmp=()(()) 
+ tmp=()() 
+ tmp=()()( 
+ tmp=()()() 
+ */
+```
