@@ -54,3 +54,20 @@ class Solution {
     }
 }
 ```
+### [剑指Offer26 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/) 
+- 思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
+```java
+class Solution {
+    public boolean isSubStructure(TreeNode A, TreeNode B) {
+        if(A == null || B == null) return false;
+        if(A.val == B.val && (help(A.left,B.left)&&help(A.right,B.right))) return true;
+        return isSubStructure(A.left,B) || isSubStructure(A.right,B);
+    }
+    private boolean help(TreeNode A,TreeNode B){
+        if(B == null) return true;
+        if(A == null) return false;
+        if(A.val == B.val) return help(A.left,B.left) && help(A.right,B.right);
+        else return false;
+    }
+}
+```
