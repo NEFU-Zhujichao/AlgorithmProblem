@@ -15,6 +15,5 @@ public class OOMTest {
         }catch (Error error){
             System.out.println(count);
         }
-
     }
 }

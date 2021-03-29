@@ -71,3 +71,32 @@ class Solution {
     }
 }
 ```
+### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+- 思路：从每个索引向两边扩展回文串，找到最长的。 时间复杂度：O(n^2)。
+- [多解题思路](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/)
+```java
+class Solution {
+    public String longestPalindrome(String s) {
+        if(s.length() < 2) return s;
+        String maxLen = s.substring(0,1);
+        for(int i = 0;i < s.length();i++){
+            String oodLen = get(i,i,s);
+            String evenLen = get(i,i+1,s);
+            String tmpLen = oodLen.length() > evenLen.length() ? oodLen : evenLen;
+            if(tmpLen.length() > maxLen.length()){
+                maxLen = tmpLen;
+            }
+        }
+        // maxLen.length() 最大长度
+        return maxLen;
+    }
+    private String get(int left,int right,String A){
+        while(left >= 0 && right < A.length()){
+            if(A.charAt(left) == A.charAt(right)){
+                left--;right++;
+            }else break;
+        }
+        return A.substring(left+1,right);
+    }
+}
+```

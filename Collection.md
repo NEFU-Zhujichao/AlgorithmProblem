@@ -36,11 +36,11 @@ transient int modCount;
 - HashTable是加全局锁Synchronized，ConcurrentHashMap加的是分段锁。并且ConcurrentHashMap在1.7和1.8有一些改变。  
 ### ConcurrentHashMap原理，以及jdk7和jdk8的区别。
 - jdk7：
-    - 数据结构：Segment(继承ReentrantLock)+HashEntry+单链表，一个Segment中包含一个HashEntry数组，每个HashEntry又是一个链表。
+    - 数据结构：Segment(继承ReentrantLock)+HashEntry+单链表，一个Segment中包含一个小型的HashMap。
     - 元素查询：两次hash，第一次hash定位到segment，第二次hash定位到元素所在的链表的头部。
     - 锁：Segment分段锁(继承ReentrantLock)，锁定正在操作的segment，其他的segment不受影响，并发度为segment的大小。
 - jdk8：
     - 数据结构：synchronized+CAS+Node+单链表(红黑树)，Node的val和next都用volatile修饰，保证可见性。查找替换赋值都用CAS。
     - 锁：锁定链表的Head节点(jdk1.7锁的是segment，里面有很多的链表)，不影响其他元素的读写，锁粒度更细，效率更高。扩容时，阻塞所有的读写操作，并发扩容。
-    - 读操作无锁：Node的val和next都是volatile修饰的，读写线程对该变量互相可见。
+    - 读操作无锁：Node的val和next都是volatile修饰的，读写线程对该共享变量互相可见。
 
