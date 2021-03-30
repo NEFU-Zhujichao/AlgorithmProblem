@@ -174,3 +174,15 @@ public class CGlibProxy {
 **sqlSessionFactory构建过程：** 
 - 解析并读取配置中的xml创建Configuration对象 （单例）
 - 使用Configuration类r去创建sqlSessionFactory（builder模式）
+### SpringBoot 配置文件的加载顺序
+1. 先去项目根目录找config文件夹下找配置文件件
+2. 再去根目录下找配置文件
+3. 去resources下找cofnig文件夹下找配置文件
+4. 去resources下找配置文件
+![官网加载顺序](https://img-blog.csdnimg.cn/20181123162045737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70) 
+![本地项目测试](https://img-blog.csdnimg.cn/20181123175928348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70)
+###  SpringBoot 自动装配原理
+[SpringBoot自动装配原理](https://blog.csdn.net/qq_36986015/article/details/107488437) 
+> SpringBoot项目无需各种配置文件，一个main方法，就能把项目启动起来。
+- SpringBoot通过main方法启动SpringApplication类的静态方法run()来启动项目。
+- 

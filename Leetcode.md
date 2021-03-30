@@ -100,3 +100,5 @@ class Solution {
     }
 }
 ```
+### [从数组中选出n个数之和为k](https://blog.csdn.net/codeTZ/article/details/51125109?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs&dist_request_id=1328740.51642.16170958744643373&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs)
+- 思路：回溯法
