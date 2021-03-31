@@ -183,9 +183,20 @@ public class CGlibProxy {
 ![本地项目测试](https://img-blog.csdnimg.cn/20181123175928348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70)
 ###  SpringBoot 自动装配原理
 [SpringBoot自动装配原理](https://blog.csdn.net/qq_36986015/article/details/107488437) 
-> SpringBoot项目无需各种配置文件，一个main方法，就能把项目启动起来。
-- SpringBoot通过main方法启动SpringApplication类的静态方法run()来启动项目。
-- 
+> SpringBoot项目无需各种配置文件，一个main方法，就能把项目启动起来。SpringBoot通过main方法启动SpringApplication类的静态方法run()来启动项目。
+- 根据注释的意思，run方法从一个使用了默认配置的指定资源启动一个SpringApplication并返回ApplicationContext对象，这个默认配置如何指定呢？
+- 这个默认配置来源于@SpringBootApplication注解，这个注解是个复合注解，里面还包含了其他注解。
+  - @SpringBootConfiguration：这个注解的底层是一个@Configuration注解，意思被@Configuration注解修饰的类是一个IOC容器，支持JavaConfig的方式来进行配置；
+  - @ComponentScan：这个就是扫描注解的意思，默认扫描当前类所在的包及其子包下包含的注解，将@Controller/@Service/@Component/@Repository等注解加载到IOC容器中；
+  - @EnableAutoConfiguration：这个注解表明启动自动装配，里面包含连个比较重要的注解@AutoConfigurationPackage和@Import。
+    - @AutoConfigurationPackage和@ComponentScan一样，也是将主配置类所在的包及其子包里面的组件扫描到IOC容器中，但是区别是@AutoConfigurationPackage扫描@Entity、@MapperScan等第三方依赖的注解，@ComponentScan只扫描@Controller/@Service/@Component/@Repository这些常见注解。所以这两个注解扫描的对象是不一样的。
+    - @Import(AutoConfigurationImportSelector.class)是自动装配的核心注解，AutoConfigurationImportSelector.class中有个selectImports方法
+    - selectImports方法还调用了getCandidateConfigurations方法。
+    - @EnableAutoConfiguration注解通过@SpringBootApplication注解被间接的标记在了SpringBoot的启动类上，SpringApplication.run方法的内部就会执行selectImports方法，进而找到所有JavaConfig配置类全限定名对应的class，然后将所有自动配置类加载到IOC容器中。 
+- 那么这些类是如何获取默认属性值的呢？
+  - 在XXXXAutoConfiguration类上标注了@EnableConfigurationProperties(XXXXProperties.class)
+  - 在XXXXProperties类中的所有属性就是我们可以在application.yml中配置的属性
+> 总结：SpringBoot自动装配其实就找到xxxAutoConfiguration类，XXXAutoConfiguration这个类其实就是一个配置类，他把需要的类都加载的容器中，然后通过@EnableConfigurationProperties(xxxProperties.class)获得配置属性需要的值，但是还要进入这个类通过@ConfigurationProperties(prefix = “xxx”)来把配置文件中的配置导入进来。
 ###  SpringApplication
 1. 推断应用的类型是普通的项目还是Web项目。
 2. 查找并加载所有可用初始化器，设置到initializers属性中。
