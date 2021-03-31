@@ -77,6 +77,24 @@ public  class TestRC {
 - 在新生代工作的垃圾回收器：Serial, ParNew, ParallelScavenge
 - 在老年代工作的垃圾回收器：CMS，Serial Old, Parallel Old
 - 同时在新老生代工作的垃圾回收器：G1
+---
+- 什么是 STW ？所谓的 STW, 即在 GC（minor GC 或 Full GC）期间，只有垃圾回收器线程在工作，其他工作线程则被挂起。
+> **CMS 收集器** 
+- CMS 收集器是以实现最短 STW 时间为目标的收集器，如果应用很重视服务的响应速度，希望给用户最好的体验，则 CMS 收集器是个很不错的选择！
+- 我们之前说老年代主要用标记整理法，而 CMS 虽然工作于老年代，但采用的是**标记清除法**，主要有以下四个步骤
+  - 初始标记
+  - 并发标记
+  - 重新标记
+  - 并发清除
+![](https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUrYqPicjVwjuMChPrPicNHdXBk0HdaA4x1FqkobKRxdEribRMQn86zDt9FpceO1icmLwd6oichSjk4ibZQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
+- 从图中可以的看到初始标记和重新标记两个阶段会发生 STW，造成用户线程挂起，不过初始标记仅标记 GC Roots 能关联的对象，速度很快，并发标记是进行 GC Roots  Tracing 的过程，重新标记是为了修正并发标记期间因用户线程继续运行而导致标记产生变动的那一部分对象的标记记录，这一阶段停顿时间一般比初始标记阶段稍长，但远比并发标记时间短。
+- 整个过程中耗时最长的是并发标记和标记清理，不过这两个阶段用户线程都可工作，所以不影响应用的正常使用，所以总体上看，可以认为 CMS 收集器的内存回收过程是与用户线程一起并发执行的。
+- 但是 CMS 收集器远达不到完美的程度，主要有以下三个缺点
+  - CMS 收集器对 CPU 资源非常敏感  原因也可以理解，比如本来我本来可以有 10 个用户线程处理请求，现在却要分出 3 个作为回收线程，吞吐量下降了30%，CMS 默认启动的回收线程数是 （CPU数量+3）/ 4, 如果 CPU 数量只有一两个，那吞吐量就直接下降 50%,显然是不可接受的
+  - CMS 无法处理浮动垃圾（Floating Garbage）,可能出现 「Concurrent Mode Failure」而导致另一次 Full GC 的产生，由于在并发清理阶段用户线程还在运行，所以清理的同时新的垃圾也在不断出现，这部分垃圾只能在下一次 GC 时再清理掉（即浮云垃圾），同时在垃圾收集阶段用户线程也要继续运行，就需要预留足够多的空间要确保用户线程正常执行，这就意味着 CMS 收集器不能像其他收集器一样等老年代满了再使用，JDK 1.5 默认当老年代使用了68%空间后就会被激活，当然这个比例可以通过 -XX:CMSInitiatingOccupancyFraction 来设置，但是如果设置地太高很容易导致在 CMS 运行期间预留的内存无法满足程序要求，会导致 Concurrent Mode Failure 失败，这时会启用 Serial Old 收集器来重新进行老年代的收集，而我们知道 Serial Old 收集器是单线程收集器，这样就会导致 STW 更长了。
+  - CMS 采用的是标记清除法，上文我们已经提到这种方法会产生大量的内存碎片，这样会给大内存分配带来很大的麻烦，如果无法找到足够大的连续空间来分配对象，将会触发 Full GC，这会影响应用的性能。
+> G1（Garbage First） 收集器
+- 
 ### OOM排查
 - VM参数 -Xms10m -Xmx10m -XX:+HeapDumpOnOutOfMemoryError -Xms10m -Xmx10m -XX:+HeapDumpOnClassNotFoundException
 - 把OOM的文件Dump下来，用Jprofiler分析大对象所在的位置
