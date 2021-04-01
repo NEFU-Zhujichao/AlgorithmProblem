@@ -36,7 +36,6 @@ public class Solution {
     }
 }
 ```
-
 ### [NC78反转链表](https://www.nowcoder.com/practice/75e878df47f24fdc9dc3e400ec6058ca?tpId=117&tqId=37777&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 
 - 思路：p -> head.next,head.next -> pre,pre -> head, head -> p;

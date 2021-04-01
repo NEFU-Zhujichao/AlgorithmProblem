@@ -1,7 +1,4 @@
-import java.util.HashSet;
-import java.util.Scanner;
-import java.util.Set;
-
+import java.util.*;
 /**
  * 找出数组中第count小的数
  */
@@ -33,7 +30,6 @@ public class QuickSortTest {
         quickSort(nums,left,i-1);
         quickSort(nums,i+1,right);
     }
-
     private static void swap(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];

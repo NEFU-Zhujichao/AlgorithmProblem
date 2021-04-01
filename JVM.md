@@ -5,6 +5,7 @@
   - 数值类型包括，整型，浮点型，和char类型。boolean类型同样只有true和false。returnAddress类型是一个指针，指向jvm指令的操作码，在Java中没有与之对应的类型。
 - 引用类型：类类型，数组类型，和接口类型。
 ### JVM内存模型
+![](https://uploadfiles.nowcoder.com/images/20210321/359311331_1616298576508/844176BACF4DCE28D7AD4AE3EF10A6D4) 
 JVM调优在堆中调
 > 运行时公有数据区
 - 方法区：static、final、Class类模板、常量池
