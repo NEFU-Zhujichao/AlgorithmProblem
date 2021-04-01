@@ -102,3 +102,32 @@ class Solution {
 ```
 ### [从数组中选出n个数之和为k](https://blog.csdn.net/codeTZ/article/details/51125109?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs&dist_request_id=1328740.51642.16170958744643373&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs)
 - 思路：回溯法
+### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
+- [思路：](https://leetcode-cn.com/problems/spiral-matrix/solution/cxiang-xi-ti-jie-by-youlookdeliciousc-3/) 
+1. 定义上下左右边界值
+2. 其次向右移动到最右，此时第一行因为已经使用过了，可以将其从图中删去，体现在代码中就是重新定义上边界
+3. 判断若重新定义后，上下边界交错，表明螺旋矩阵遍历结束，跳出循环，返回答案
+4. 若上下边界不交错，则遍历还未结束，接着向下向左向上移动，操作过程与第一，二步同理
+5. 不断循环以上步骤，直到某两条边界交错，跳出循环，返回答案
+
+```java
+import java.util.Collections;
+
+class Solution {
+    public List<Integer> spiralOrder(int[][] matrix) {
+        List<Integer> res = new ArrayList<>();
+        if (matrix == null) return res;
+        int l = 0, r = matrix[0].length - 1, u = 0, d = matrix.length - 1;
+        while (true) {
+            for (int i = l; i <= r; i++) res.add(matrix[u][i]);
+            if (++u > d) return res;
+            for (int i = u; i <= d; i++) res.add(matrix[i][r]);
+            if (--r < l) return res;
+            for (int i = r; i >= l; i--) res.add(matrix[d][i]);
+            if (--d < u) return res;
+            for (int i = d; i >= u; i--) res.add(matrix[i][l]);
+            if (++l > r) return res;
+        }
+    }
+}
+```

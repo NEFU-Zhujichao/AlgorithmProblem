@@ -50,7 +50,8 @@ public  class TestRC {
     - 本地方法栈中 JNI（即一般说的 Native 方法）引用的对象
 ### GC
 - 初始堆内存大小为10M：默认1/64 最大堆内存大小为10M：默认1/4 
-- -Xms10m -Xmx10m -Xlog:gc*           
+- -Xms10m -Xmx10m -Xlog:gc*   
+![](https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUrYqPicjVwjuMChPrPicNHdXunqRMuhq6FZbcKicNibcvKmeTwic05ordoZ2wgW4hH5KtMlKu8DvQibE5w/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1) 
 > GC回收在伊甸园区和老年代。新生代分为伊甸园区、幸存区from、幸存区to。
 **复制算法最佳使用场景：对象存活度较低。也就是新生代，所以新生代使用复制算法。**
 > 年轻代主要用复制算法 from -> to 谁空谁是to区。老年代使用标记清除 + 标记压缩混合。
@@ -94,7 +95,26 @@ public  class TestRC {
   - CMS 无法处理浮动垃圾（Floating Garbage）,可能出现 「Concurrent Mode Failure」而导致另一次 Full GC 的产生，由于在并发清理阶段用户线程还在运行，所以清理的同时新的垃圾也在不断出现，这部分垃圾只能在下一次 GC 时再清理掉（即浮云垃圾），同时在垃圾收集阶段用户线程也要继续运行，就需要预留足够多的空间要确保用户线程正常执行，这就意味着 CMS 收集器不能像其他收集器一样等老年代满了再使用，JDK 1.5 默认当老年代使用了68%空间后就会被激活，当然这个比例可以通过 -XX:CMSInitiatingOccupancyFraction 来设置，但是如果设置地太高很容易导致在 CMS 运行期间预留的内存无法满足程序要求，会导致 Concurrent Mode Failure 失败，这时会启用 Serial Old 收集器来重新进行老年代的收集，而我们知道 Serial Old 收集器是单线程收集器，这样就会导致 STW 更长了。
   - CMS 采用的是标记清除法，上文我们已经提到这种方法会产生大量的内存碎片，这样会给大内存分配带来很大的麻烦，如果无法找到足够大的连续空间来分配对象，将会触发 Full GC，这会影响应用的性能。
 > G1（Garbage First） 收集器
-- 
+- G1 收集器是面向服务端的垃圾收集器，被称为驾驭一切的垃圾回收器，主要有以下几个特点
+  - 像 CMS 收集器一样，能与应用程序线程并发执行。
+  - 整理空闲空间更快。
+  - 需要 GC 停顿时间更好预测。
+  - 不会像 CMS 那样牺牲大量的吞吐性能。
+  - 不需要更大的 Java Heap
+- 与 CMS 相比，它在以下两个方面表现更出色
+  - 运作期间不会产生内存碎片，G1 从整体上看采用的是标记-整理法，局部（两个 Region）上看是基于复制算法实现的，两个算法都不会产生内存碎片，收集后提供规整的可用内存，这样有利于程序的长时间运行。
+  - 在 STW 上建立了可预测的停顿时间模型，用户可以指定期望停顿时间，G1 会将停顿时间控制在用户设定的停顿时间以内。
+-  G1 各代的存储地址不是连续的，每一代都使用了 n 个不连续的大小相同的 Region，每个Region占有一块连续的虚拟内存地址，如图示
+![](https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUrYqPicjVwjuMChPrPicNHdX7eYnibUFHuo7AibZyLsaHq6tWpWnwLO3jj1rk3mThrAPSsdmVMrgzlLQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1) 
+- 除了和传统的新老生代，幸存区的空间区别，Region还多了一个H，它代表Humongous，这表示这些Region存储的是巨大对象（humongous object，H-obj），即大小大于等于region一半的对象，这样超大对象就直接分配到了老年代，防止了反复拷贝移动。那么 G1 分配成这样有啥好处呢？
+- 传统的收集器如果发生 Full GC 是对整个堆进行全区域的垃圾收集，而分配成各个 Region 的话，方便 G1 跟踪各个 Region 里垃圾堆积的价值大小（回收所获得的空间大小及回收所需经验值），这样根据价值大小维护一个优先列表，根据允许的收集时间，优先收集回收价值最大的 Region,也就避免了整个老年代的回收，也就减少了 STW 造成的停顿时间。同时由于只收集部分 Region,可就做到了 STW 时间的可控。
+- G1 收集器的工作步骤如下
+  - 初始标记
+  - 并发标记
+  - 最终标记
+  - 筛选回收
+![](https://mmbiz.qpic.cn/mmbiz_png/OyweysCSeLUrYqPicjVwjuMChPrPicNHdX8S08rDRVliaVW84ibCM9kzCtIxCIYqFGGbiad6VPBV9qSZEqOJtTuyyicQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1) 
+- 可以看到整体过程与 CMS 收集器非常类似，筛选阶段会根据各个 Region 的回收价值和成本进行排序，根据用户期望的 GC 停顿时间来制定回收计划。
 ### OOM排查
 - VM参数 -Xms10m -Xmx10m -XX:+HeapDumpOnOutOfMemoryError -Xms10m -Xmx10m -XX:+HeapDumpOnClassNotFoundException
 - 把OOM的文件Dump下来，用Jprofiler分析大对象所在的位置
