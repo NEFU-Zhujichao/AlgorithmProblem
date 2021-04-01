@@ -13,3 +13,7 @@
 ### private的意义是什么
 - private并不是解决安全问题的，如果想让解决代码的安全问题，请用别的办法。
 - private的意义是OOP（面向对象编程）的封装概念。
+### sleep与wait的区别 
+- 这两个方法来自不同的类分别是，sleep来自Thread类，和wait来自Object类。sleep是Thread的静态类方法，谁调用的谁去睡觉，即使在a线程里调用了b的sleep方法，实际上还是a去睡觉，要让b线程睡觉要在b的代码中调用sleep。
+- 最主要是sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法。
+- wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用

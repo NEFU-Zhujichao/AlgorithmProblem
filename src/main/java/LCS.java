@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class Test2 {
+public class LCS {
     public static void main(String[] args) {
         // 动态规划 O(n^2) 超时
         int[] arr = {4,5,8,7,1,2,3};
