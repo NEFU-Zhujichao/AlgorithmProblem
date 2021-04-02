@@ -15,9 +15,15 @@
   - SpringBean的实例化和属性赋值是分两步来做的。
 - 设置对象属性（DI）：通过BeanWrapper提供的设置属性的接口完成属性依赖注入。
 - 注入Aware接口（BeanFactoryAware， 可以用这个方式来获取其它 Bean，ApplicationContextAware）：Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给bean。
-- BeanPostProcessor：自定义的处理（分前置处理和后置处理）。
-- InitializingBean和init-method：执行我们自己定义的初始化方法。
+  - ApplicationContextAware：注入ApplicationContext对象
+  - BeanFactoryAware：注入BeanFactory对象
+  - BeanNameAware：注入BeanName对象
+- BeanPostProcessor：自定义的处理（分**前置处理**和后置处理）。
+- InitializingBean：检查是否是InitializingBean，决定是否调用afterPropertiesSet()方法。
+- init-method：执行我们自己定义的初始化方法。
+- BeanPostProcessor：**后置处理**
 - 使用。
+- 是否实现了DisposableBean接口： 此方法只负责singleton类型对象的销毁逻辑，因为Spring容器只负责singleton的生命周期，而不负责prototype。
 - destroy：bean的销毁。
 > **在SpringBean的生命周期，Spring预留了很多的hook给我们去扩展** 
 > 1. Bean实例化之前有BeanFactoryPostProcessor
