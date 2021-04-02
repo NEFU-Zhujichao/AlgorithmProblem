@@ -151,9 +151,31 @@ public class CGlibProxy {
 |    PROPAGATION_NESTED     | 如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。 |
 ### Spring 如何解决循环依赖
 - 三级缓存
-  - singletonObjects：一级，日常实际获取Bean的地方。
-  - earlySingletonObjects：二级，已实例化，但还没进行属性注入，由三级缓存放进来。
-  - singletonFactory：三级，value是一个对象工厂。
+  - singletonObjects：一级缓存，存储的是所有创建好了的单例Bean
+  - earlySingletonObjects：完成实例化，但是还未进行属性注入及初始化的对象
+  - singletonFactory：提前暴露的一个单例工厂，二级缓存中存储的就是从这个工厂中获取到的对象
+![](https://mmbiz.qpic.cn/mmbiz_png/tpEILlElskLZVx9XICtHkcNxLxMg0TuX9Qocjibiaz07hXItqjoWejaiauqu6uppr8hFv1T3U6RZdiaCOhSX5TW3iaA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1) 
+> 具体步骤：
+- Spring通过三级缓存解决了循环依赖，其中一级缓存为单例池（singletonObjects）,二级缓存为早期曝光对象earlySingletonObjects，三级缓存为早期曝光对象工厂（singletonFactories）。
+- 当A、B两个类发生循环引用时，在A完成实例化后，就使用实例化后的对象去创建一个对象工厂，并添加到三级缓存中，如果A被AOP代理，那么通过这个工厂获取到的就是A代理后的对象，如果A没有被AOP代理，那么这个工厂获取到的就是A实例化的对象。
+- 当A进行属性注入时，会去创建B，同时B又依赖了A，所以创建B的同时又会去调用getBean(a)来获取需要的依赖，此时的getBean(a)会从缓存中获取：
+  - 第一步，先获取到三级缓存中的工厂；
+  - 第二步，调用对象工工厂的getObject方法来获取到对应的对象，得到这个对象后将其注入到B中。紧接着B会走完它的生命周期流程，包括初始化、后置处理器等。
+- 当B创建完后，会将B再注入到A中，此时A再完成它的整个生命周期。至此，循环依赖结束！
+> 思考题：为什么在下表中的第三种情况的循环依赖能被解决，而第四种情况不能被解决呢？ 
+- 提示：Spring在创建Bean时默认会根据自然排序进行创建，所以A会先于B进行创建。
+- 答案：
+  - 因为第三种情况下，实例化A之后，当A进行属性注入时，因为B是setter方法注入的，所以可以去实例化B。
+  - 第四种情况下，先实例化A之后，属性注入时发现注入B的方式为构造器，而此时B并没有进行实例化，所以更没有构造器，所以不能解决循环依赖的问题。 
+
+| **依赖情况**           | **依赖注入方式**                                   | **循环依赖是否被解决** |
+| ---------------------- | -------------------------------------------------- | ---------------------- |
+| AB相互依赖（循环依赖） | 均采用setter方法注入                               | 是                     |
+| AB相互依赖（循环依赖） | 均采用构造器注入                                   | 否                     |
+| AB相互依赖（循环依赖） | A中注入B的方式为setter方法，B中注入A的方式为构造器 | 是                     |
+| AB相互依赖（循环依赖） | B中注入A的方式为setter方法，A中注入B的方式为构造器 | 否                     |
+### 为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？
+- 如果要使用二级缓存解决循环依赖，意味着所有Bean在实例化后就要完成AOP代理，这样违背了Spring设计的原则，Spring在设计之初就是通过**AnnotationAwareAspectJAutoProxyCreator**这个后置处理器来在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理。
 #### 解决过程
 > 1. **A对象实例化之后，属性注入之前，其实会把A对象放入到三级缓存中。key是BeanName，value是ObjectFactory**
 > 2. **等到A对象属性注入时，发现依赖B，又去实例化B时。B属性注入需要去获取A对象，这里就是从三级缓存中拿出ObjectFactory，从ObjectFactory中得到对应的Bean(就是对象A)**
