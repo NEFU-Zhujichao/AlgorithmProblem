@@ -5,8 +5,8 @@
 [Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142)  
 ![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
 ### Spring IOC 初始化流程
-- resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成。
-- beanDefinition载入：BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
+- resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成beanDefinition载入
+- BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
 - BeanDefinition注册：即向IOC容器注册这些BeanDefinition， 通过BeanDefinitionRegistry实现。
 ### Bean的生命周期
 - 实例化Bean：Ioc容器通过获取BeanDefinition对象中的信息进行实例化，实例化对象被包装在BeanWrapper对象中。
@@ -170,16 +170,16 @@ public class CGlibProxy {
 ### MyBatis原理
 - sqlSessionFactoryBuilder加载mybatis核心配置文件生成sqlSessionFactory（单例）
 - 工厂模式生成sqlSession执行sql以及控制事务
-- Mybatis通过动态代理使Mapper（sql映射器）接口能运行起来即为接口生成代理对象将sql查询到结果映射成pojo
+- Mybatis通过动态代理使Mapper（sql映射器）接口能运行起来即为接口生成代理对象将sql查询到结果映射成pojo 
 **sqlSessionFactory构建过程：** 
 - 解析并读取配置中的xml创建Configuration对象 （单例）
 - 使用Configuration类去创建sqlSessionFactory（builder模式）
 ### MyBatis如何防止SQL注入
-![MyBatis如何防止SQL注入](https://blog.csdn.net/renmengmeng520/article/details/100126301)
+[MyBatis如何防止SQL注入](https://blog.csdn.net/renmengmeng520/article/details/100126301)
 ### SpringBoot 配置文件的加载顺序
 1. 先去项目根目录找config文件夹下找配置文件件
 2. 再去根目录下找配置文件
-3. 去resources下找cofnig文件夹下找配置文件
+3. 去resources下找config文件夹下找配置文件
 4. 去resources下找配置文件
 ![官网加载顺序](https://img-blog.csdnimg.cn/20181123162045737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70) 
 ![本地项目测试](https://img-blog.csdnimg.cn/20181123175928348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70)
