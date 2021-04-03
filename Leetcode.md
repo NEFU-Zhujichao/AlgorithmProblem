@@ -131,3 +131,42 @@ class Solution {
     }
 }
 ```
+### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/submissions/)
+- 思路：经典dp  flag数组记录该点由谁得到的
+```java
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        int m = text1.length(),n = text2.length(),max = 0;
+        int[][] dp = new int[m+1][n+1];
+        int[][] flag = new int[m+1][n+1];
+        for(int i = 1;i <= m;i++){
+            char t1 = text1.charAt(i-1);
+            for(int j = 1;j <= n;j++){
+                char t2 = text2.charAt(j-1);
+                if(t1 == t2){
+                    dp[i][j] = dp[i-1][j-1] + 1;
+                    flag[i][j] = 1;
+                }
+                else{
+                    flag[i][j] = dp[i-1][j] >= dp[i][j-1]?2:3;
+                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]); 
+                }
+                max = Math.max(max,dp[i][j]);
+            }
+        }
+        int i = m,j = n;
+        StringBuilder sb = new StringBuilder();
+        while(max > 0){
+            char t1 = text1.charAt(i-1);
+            char t2 = text2.charAt(j-1);
+            if(t1 == t2){
+                sb.insert(0,t1);
+                --i;--j;--max;
+            }else if(flag[i][j] == 2) --i;
+             else --j;   
+        }
+        System.out.println(sb.toString());
+        return max;
+    }
+}
+```

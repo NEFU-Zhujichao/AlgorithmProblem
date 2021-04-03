@@ -8,23 +8,6 @@
 [具体区别](https://blog.csdn.net/sky_xin/article/details/84926333) 
 - HashMap允许key和value都是null，但是HashTable不允许。
 - 当HashMap的key为自定义的类型时，需要重写hashcode和equals方法。因为默认会调用Object类的方法。
-```java
-public class Main{
-/**实际存储的key-value键值对的个数*/
-transient int size;
-/**阈值，当table == {}时，该值为初始容量（初始容量默认为16）；当table被填充了，也就是为table分配内存空间后，threshold一般为 capacity*loadFactory。HashMap在进行扩容时需要参考threshold，后面会详细谈到*/
-int threshold;
-/**负载因子，代表了table的填充度有多少，默认是0.75
- 加载因子存在的原因，还是因为减缓哈希冲突，如果初始桶为16，等到满16个元素才扩容，某些桶里可能就有不止一个元素了。
- 所以加载因子默认为0.75，也就是说大小为16的HashMap，到了第13个元素，就会扩容成32。
- */
-final float loadFactor;
-/**HashMap被改变的次数，由于HashMap非线程安全，在对HashMap进行迭代时，
- 如果期间其他线程的参与导致HashMap的结构发生变化了（比如put，remove等操作），
- 需要抛出异常ConcurrentModificationException*/
-transient int modCount;
-}
-```
 ### 为什么是2的次幂
 [详细](https://blog.csdn.net/sidihuo/article/details/78489820) 
 - 为了提升模运算的计算速度。减少碰撞，或者说为了让HashMap里面元素分布尽量均匀些，应该是哈希算法的功能。
@@ -43,4 +26,3 @@ transient int modCount;
     - 数据结构：synchronized+CAS+Node+单链表(红黑树)，Node的val和next都用volatile修饰，保证可见性。查找替换赋值都用CAS。
     - 锁：锁定链表的Head节点(jdk1.7锁的是segment，里面有很多的链表)，不影响其他元素的读写，锁粒度更细，效率更高。扩容时，阻塞所有的读写操作，并发扩容。
     - 读操作无锁：Node的val和next都是volatile修饰的，读写线程对该共享变量互相可见。
-

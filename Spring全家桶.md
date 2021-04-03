@@ -179,9 +179,7 @@ public class CGlibProxy {
 #### 解决过程
 > 1. **A对象实例化之后，属性注入之前，其实会把A对象放入到三级缓存中。key是BeanName，value是ObjectFactory**
 > 2. **等到A对象属性注入时，发现依赖B，又去实例化B时。B属性注入需要去获取A对象，这里就是从三级缓存中拿出ObjectFactory，从ObjectFactory中得到对应的Bean(就是对象A)**
-> 3. **把三级缓存的A记录干掉，然后放到二级缓存中。显然，二级缓存的key是BeanName，value是Bean(这里的Bean还没做完属性注入的相关工作)。等到完全初始化之后，就会把二级缓存给remove掉，塞到一级缓存中，我们getBean的时候，实际上拿到的是一级缓存的。**
-- 循环依赖的本质 Two Sum
-- 先去缓存里找Bean，没有则实例化当前的Bean放到Map，如果有需要依赖当前Bean的，就能从Map取到。 
+> 3. **把三级缓存的A记录干掉，然后放到二级缓存中。显然，二级缓存的key是BeanName，value是Bean(这里的Bean还没做完属性注入的相关工作)。等到完全初始化之后，就会把二级缓存给remove掉，塞到一级缓存中，我们getBean的时候，实际上拿到的是一级缓存的。** 
 ### SpringMVC执行流程
 ![SpringMVC执行流程](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcxMTE1MTQxNDIzODAz?x-oss-process=image/format,png) 
 1. 用户发起请求到前端控制器（DispatcherServlet），该控制器会过滤出哪些请求可以访问Servlet、哪些不能访问。就是url-pattern的作用，并且会加载springmvc.xml配置文件。
