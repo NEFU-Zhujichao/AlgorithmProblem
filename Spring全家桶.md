@@ -1,9 +1,16 @@
 # Spring全家桶面经
+### 什么是Spring
+> **Spring是一个开源框架，目的是解决企业级应用开发的复杂性。Spring是一个轻量级的控制反转(IoC)和面向切面(AOP)的容器框架。**
+### 什么是SpringBoot
+> **SpringBoot通过简化配置来进一步简化了Spring应用的整个搭建和开发过程。SpringBoot开箱即用，导入相关依赖的JAR包即可使用相关功能。**
+### 什么是SpringCloud
+> **Spring Cloud是一系列框架的有序集合。它利用Spring Boot的开发便利性巧妙地简化了分布式系统基础设施的开发，如服务发现注册、配置中心、消息总线、负载均衡、断路器、数据监控等，都可以用Spring Boot的开发风格做到一键启动和部署。**
+---
 - IOC：控制反转：将对象的创建权，由Spring管理。
 - DI（依赖注入）：在Spring创建对象的过程中，把对象依赖的属性注入到类中。 
 ---
 [Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142)  
-![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70) 
+![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 ### Spring IOC 初始化流程
 - resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成beanDefinition载入
 - BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
