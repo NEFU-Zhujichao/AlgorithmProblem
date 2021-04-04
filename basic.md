@@ -1,4 +1,4 @@
-# 面经整理
+# Java基础面经
 ### ==和equals比较
 - ==对比的是栈中的值。**基本数据类型比较的是变量值，引用类型是堆中内存对象的地址。**
 - Object默认equals方法为==比较。但是我们可以重写equals方法。**String类重写了equals方法，如果说我们两个字符串只要是每个位置对应的字符相同equals方法就会返回true。**
@@ -13,7 +13,7 @@
 ### private的意义是什么
 - private并不是解决安全问题的，如果想让解决代码的安全问题，请用别的办法。
 - private的意义是OOP（面向对象编程）的封装概念。
-### sleep与wait的区别 
+### sleep与wait的区别
 - 这两个方法来自不同的类分别是，sleep来自Thread类，和wait来自Object类。sleep是Thread的静态类方法，谁调用的谁去睡觉，即使在a线程里调用了b的sleep方法，实际上还是a去睡觉，要让b线程睡觉要在b的代码中调用sleep。
 - 最主要是sleep方法没有释放锁，而wait方法释放了锁，使得其他线程可以使用同步控制块或者方法。
 - wait，notify和notifyAll只能在同步控制方法或者同步控制块里面使用，而sleep可以在任何地方使用
