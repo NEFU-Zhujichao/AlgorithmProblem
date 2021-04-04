@@ -1,52 +1,62 @@
 # 算法题(力扣高频TOP100)
 
 ### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
+
 - 思路：双指针。
-![](https://pic.leetcode-cn.com/a2a97349454ee3657a8a3d9db0399921894c7f581c2e9540d0e2c3df122fec95-Picture1.png)
-![](https://pic.leetcode-cn.com/239c53727f392398829ae835df2d4b8dce374954b2aac2e3745b3ff9c32d7a9f-Picture2.png)
+  ![](https://pic.leetcode-cn.com/a2a97349454ee3657a8a3d9db0399921894c7f581c2e9540d0e2c3df122fec95-Picture1.png)
+  ![](https://pic.leetcode-cn.com/239c53727f392398829ae835df2d4b8dce374954b2aac2e3745b3ff9c32d7a9f-Picture2.png)
+
 ```java
 class Solution {
     public int maxArea(int[] height) {
-        if(height == null) return 0;
-        int i = 0,j = height.length-1,ans = 0,tmp = 0;
-        while(i < j){
-            tmp = Math.min(height[i],height[j]) * (j - i);
-            ans = Math.max(ans,tmp);
-            if(height[i] <= height[j]) i++;
+        if (height == null) return 0;
+        int i = 0, j = height.length - 1, ans = 0, tmp = 0;
+        while (i < j) {
+            tmp = Math.min(height[i], height[j]) * (j - i);
+            ans = Math.max(ans, tmp);
+            if (height[i] <= height[j]) i++;
             else j--;
         }
         return ans;
     }
 }
 ```
+
 ### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
+
 - 思路：跳就完事了。每次更新能跳到的最远距离。若是此时i大于max则无法到达，若max >= nums.length() - 1则能到达。
+
 ```java
 class Solution {
     public boolean canJump(int[] nums) {
         int max = 0;
-        for(int i = 0;i < nums.length;i++){
-            if(i > max) return false;
-            if(max >= nums.length - 1) return true;
-            max = Math.max(max,i + nums[i]);
+        for (int i = 0; i < nums.length; i++) {
+            if (i > max) return false;
+            if (max >= nums.length - 1) return true;
+            max = Math.max(max, i + nums[i]);
         }
         return false;
     }
 }
 ```
+
 ### [剑指Offer16 数值的整数次方](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/)
-- 思路：[快速幂解析（二分法角度）](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/)
+
+-
+
+思路：[快速幂解析（二分法角度）](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/)
+
 ```java
 class Solution {
     public double myPow(double x, int n) {
         double ans = 1;
         long tmp = n;
-        if(n < 0){
-            x  = 1 / x;
+        if (n < 0) {
+            x = 1 / x;
             tmp = -tmp;
         }
-        while(tmp > 0){
-            if((tmp & 1) == 1) ans *= x;
+        while (tmp > 0) {
+            if ((tmp & 1) == 1) ans *= x;
             x *= x;
             tmp >>= 1;
         }
@@ -54,56 +64,72 @@ class Solution {
     }
 }
 ```
-### [剑指Offer26 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/) 
-- 思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
+
+### [剑指Offer26 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
+
+-
+
+思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
+
 ```java
 class Solution {
     public boolean isSubStructure(TreeNode A, TreeNode B) {
-        if(A == null || B == null) return false;
-        if(A.val == B.val && (help(A.left,B.left)&&help(A.right,B.right))) return true;
-        return isSubStructure(A.left,B) || isSubStructure(A.right,B);
+        if (A == null || B == null) return false;
+        if (A.val == B.val && (help(A.left, B.left) && help(A.right, B.right))) return true;
+        return isSubStructure(A.left, B) || isSubStructure(A.right, B);
     }
-    private boolean help(TreeNode A,TreeNode B){
-        if(B == null) return true;
-        if(A == null) return false;
-        if(A.val == B.val) return help(A.left,B.left) && help(A.right,B.right);
+
+    private boolean help(TreeNode A, TreeNode B) {
+        if (B == null) return true;
+        if (A == null) return false;
+        if (A.val == B.val) return help(A.left, B.left) && help(A.right, B.right);
         else return false;
     }
 }
 ```
+
 ### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
+
 - 思路：从每个索引向两边扩展回文串，找到最长的。 时间复杂度：O(n^2)。
 - [多解题思路](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/)
+
 ```java
 class Solution {
     public String longestPalindrome(String s) {
-        if(s.length() < 2) return s;
-        String maxLen = s.substring(0,1);
-        for(int i = 0;i < s.length();i++){
-            String oodLen = get(i,i,s);
-            String evenLen = get(i,i+1,s);
+        if (s.length() < 2) return s;
+        String maxLen = s.substring(0, 1);
+        for (int i = 0; i < s.length(); i++) {
+            String oodLen = get(i, i, s);
+            String evenLen = get(i, i + 1, s);
             String tmpLen = oodLen.length() > evenLen.length() ? oodLen : evenLen;
-            if(tmpLen.length() > maxLen.length()){
+            if (tmpLen.length() > maxLen.length()) {
                 maxLen = tmpLen;
             }
         }
         // maxLen.length() 最大长度
         return maxLen;
     }
-    private String get(int left,int right,String A){
-        while(left >= 0 && right < A.length()){
-            if(A.charAt(left) == A.charAt(right)){
-                left--;right++;
-            }else break;
+
+    private String get(int left, int right, String A) {
+        while (left >= 0 && right < A.length()) {
+            if (A.charAt(left) == A.charAt(right)) {
+                left--;
+                right++;
+            } else break;
         }
-        return A.substring(left+1,right);
+        return A.substring(left + 1, right);
     }
 }
 ```
+
 ### [从数组中选出n个数之和为k](https://blog.csdn.net/codeTZ/article/details/51125109?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs&dist_request_id=1328740.51642.16170958744643373&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs)
+
 - 思路：回溯法
+
 ### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
-- [思路：](https://leetcode-cn.com/problems/spiral-matrix/solution/cxiang-xi-ti-jie-by-youlookdeliciousc-3/) 
+
+- [思路：](https://leetcode-cn.com/problems/spiral-matrix/solution/cxiang-xi-ti-jie-by-youlookdeliciousc-3/)
+
 1. 定义上下左右边界值
 2. 其次向右移动到最右，此时第一行因为已经使用过了，可以将其从图中删去，体现在代码中就是重新定义上边界
 3. 判断若重新定义后，上下边界交错，表明螺旋矩阵遍历结束，跳出循环，返回答案
@@ -131,39 +157,84 @@ class Solution {
     }
 }
 ```
+
+### [NC127 最长公共子串](https://www.nowcoder.com/practice/f33f5adc55f444baa0e0ca87ad8a6aac?tpId=117&tab=answerKey)
+
+- 思路：经典dp flag数组记录该点由谁得到的
+- 子串是连续的，所以当两个字母不相等时，dp[i][j] = 0, 如果是子序列， dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
+
+```java
+import java.util.*;
+
+public class Solution {
+    public String LCS(String str1, String str2) {
+        if (str1 == null || str2 == null || str1.equals("") || str2.equals("")) return "-1";
+        int[][] dp = new int[str1.length() + 1][str2.length() + 1];
+        int maxLength = 0;   //记录最长公共子串长度
+        int end = 0;          //记录最长子串最后一个字符的下标
+        int m = str1.length();
+        int n = str2.length();
+        //初始化表格边界
+        for (int i = 0; i <= m; ++i) dp[i][0] = 0;
+        for (int j = 0; j <= n; ++j) dp[0][j] = 0;
+        //循环"填表"
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (str1.charAt(i - 1) == str2.charAt(j - 1)) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = 0;
+                }
+                //记录最长子串的长度和当前下标
+                if (dp[i][j] >= maxLength) {
+                    maxLength = dp[i][j];
+                    // 如果是i-1 则截s1 如果是j-1 则截s2
+                    end = i - 1;
+                }
+            }
+        }
+        if (maxLength == 0) return "-1";
+        return str1.substring(end - maxLength + 1, end + 1);
+    }
+}
+```
+
 ### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/submissions/)
-- 思路：经典dp  flag数组记录该点由谁得到的
+
+- 思路：经典dp flag数组记录该点由谁得到的
+
 ```java
 class Solution {
     public int longestCommonSubsequence(String text1, String text2) {
-        int m = text1.length(),n = text2.length(),max = 0;
-        int[][] dp = new int[m+1][n+1];
-        int[][] flag = new int[m+1][n+1];
-        for(int i = 1;i <= m;i++){
-            char t1 = text1.charAt(i-1);
-            for(int j = 1;j <= n;j++){
-                char t2 = text2.charAt(j-1);
-                if(t1 == t2){
-                    dp[i][j] = dp[i-1][j-1] + 1;
+        int m = text1.length(), n = text2.length(), max = 0;
+        int[][] dp = new int[m + 1][n + 1];
+        int[][] flag = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            char t1 = text1.charAt(i - 1);
+            for (int j = 1; j <= n; j++) {
+                char t2 = text2.charAt(j - 1);
+                if (t1 == t2) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
                     flag[i][j] = 1;
+                } else {
+                    flag[i][j] = dp[i - 1][j] >= dp[i][j - 1] ? 2 : 3;
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
                 }
-                else{
-                    flag[i][j] = dp[i-1][j] >= dp[i][j-1]?2:3;
-                    dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]); 
-                }
-                max = Math.max(max,dp[i][j]);
+                max = Math.max(max, dp[i][j]);
             }
         }
-        int i = m,j = n;
+        int i = m, j = n;
         StringBuilder sb = new StringBuilder();
-        while(max > 0){
-            char t1 = text1.charAt(i-1);
-            char t2 = text2.charAt(j-1);
-            if(t1 == t2){
-                sb.insert(0,t1);
-                --i;--j;--max;
-            }else if(flag[i][j] == 2) --i;
-             else --j;   
+        while (max > 0) {
+            char t1 = text1.charAt(i - 1);
+            char t2 = text2.charAt(j - 1);
+            if (t1 == t2) {
+                sb.insert(0, t1);
+                --i;
+                --j;
+                --max;
+            } else if (flag[i][j] == 2) --i;
+            else --j;
         }
         System.out.println(sb.toString());
         return max;
