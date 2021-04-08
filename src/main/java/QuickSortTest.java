@@ -8,7 +8,9 @@ public class QuickSortTest {
         int n = scanner.nextInt(),count = scanner.nextInt();
         int[] nums = new int[n];
         for (int i = 0;i < n;i++) nums[i] = scanner.nextInt();
+        // 快排
         quickSort(nums,0,n-1);
+
         Set<Integer> set = new HashSet<>();
         for(int i = 0;i < n;i++){
             set.add(nums[i]);

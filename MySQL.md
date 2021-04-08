@@ -1,5 +1,7 @@
 # MySQL面经
-SELECT * FROM table LIMIT 5,10; //检索记录行6-15 
+[MySQL](https://www.zhihu.com/people/aobingJava/posts?page=2) 
+SELECT * FROM table LIMIT 5,10; //检索记录行6-15
+### [深入理解 MySQL事务](https://blog.csdn.net/qq_35246620/article/details/61200815?utm_source=app&app_version=4.5.8)
 ### 索引的优势和劣势
 优势： 
 - 可以提高数据检索的效率，降低数据库的IO成本，类似于书的目录。
@@ -90,7 +92,8 @@ explain select * from A where X=? and Y=?
 - 唯一索引：由于索引定义了唯一性，查找到第一个满足条件的记录后，直接停止继续检索。
 ### 索引失效条件
 - 条件是or，如果还想让or条件生效，给or每个字段加个索引
-- like开头% eg: where name like '%风';
+- like开头% eg: where name like '%风'
 - 如果列类型是字符串，那一定要在条件中将数据使用引号引用起来，否则不会使用索引
 - where中索引列使用了**函数或有运算**
+- 模糊查询时like '%风' 用不到索引  like '风%' 能用到索引
 

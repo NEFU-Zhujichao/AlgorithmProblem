@@ -204,9 +204,9 @@ public class CGlibProxy {
 - sqlSessionFactoryBuilder加载mybatis核心配置文件生成sqlSessionFactory（单例）
 - 工厂模式生成sqlSession执行sql以及控制事务
 - Mybatis通过动态代理使Mapper（sql映射器）接口能运行起来即为接口生成代理对象将sql查询到结果映射成pojo 
-**sqlSessionFactory构建过程：** 
+> **sqlSessionFactory构建过程：** 
 - 解析并读取配置中的xml创建Configuration对象 （单例）
-- 使用Configuration类去创建sqlSessionFactory（builder模式）
+- 使用Configuration类去创建sqlSessionFactory（builder模式） 
 ### MyBatis如何防止SQL注入
 [MyBatis如何防止SQL注入](https://blog.csdn.net/renmengmeng520/article/details/100126301)
 ### SpringBoot 配置文件的加载顺序

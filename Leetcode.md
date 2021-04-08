@@ -253,7 +253,6 @@ class Solution {
 
         ListNode pre = dummyNode;
         // 第 1 步：从虚拟头节点走 left - 1 步，来到 left 节点的前一个节点
-        // 建议写在 for 循环里，语义清晰
         for (int i = 0; i < left - 1; i++) {
             pre = pre.next;
         }
@@ -264,7 +263,7 @@ class Solution {
             rightNode = rightNode.next;
         }
 
-        // 第 3 步：切断出一个子链表（截取链表）
+        // 第 3 步：切断出一个子链表
         ListNode leftNode = pre.next;
         ListNode curr = rightNode.next;
 
@@ -272,7 +271,7 @@ class Solution {
         pre.next = null;
         rightNode.next = null;
 
-        // 第 4 步：同第 206 题，反转链表的子区间
+        // 第 4 步：反转链表的子区间
         reverseLinkedList(leftNode);
 
         // 第 5 步：接回到原来的链表中
@@ -291,4 +290,74 @@ class Solution {
         }
     }
 }
+```
+### [17. 电话号码的字母组合](https://leetcode-cn.com/problems/letter-combinations-of-a-phone-number/)
+- 思路：回溯法
+```java
+class Solution {
+    public List<String> letterCombinations(String digits) {
+        ArrayList<String> res = new ArrayList<>();
+        if(digits.length() == 0) return res;
+        HashMap<Character,String> map = new HashMap<>(){{
+            put('2', "abc");
+            put('3', "def");
+            put('4', "ghi");
+            put('5', "jkl");
+            put('6', "mno");
+            put('7', "pqrs");
+            put('8', "tuv");
+            put('9', "wxyz");
+        }};
+        backtrace(res,map,digits,0,new StringBuilder());
+        return res;
+    }
+    private void backtrace(ArrayList<String> res,HashMap<Character,String> map,String digits,int index,StringBuilder sb){
+        if(index == digits.length()){
+            res.add(sb.toString());
+            return;
+        }
+        String tmp = map.get(digits.charAt(index));
+        for(int i = 0;i < tmp.length();i++){
+            sb.append(tmp.charAt(i));
+            backtrace(res,map,digits,index+1,sb);
+            sb.deleteCharAt(index);
+        }
+    }
+}
+```
+### [15. 三数之和](https://leetcode-cn.com/problems/3sum/)
+- 思路：两数之和变形  a + b = target -> a + b + c = 0 == a + b = -c
+```java
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> res = new ArrayList<>();
+        if(nums == null) return res;
+        for(int i = 0;i < nums.length;i++){
+            // 去除重复情况
+            if(i > 0 && nums[i] == nums[i-1]) continue;
+            int l = i + 1,r = nums.length - 1,target = 0 - nums[i];
+            while(l < r){
+                if(nums[l] + nums[r] == target){
+                    ArrayList<Integer> list = new ArrayList<>();
+                    list.add(nums[l]);
+                    list.add(nums[r]);
+                    list.add(nums[i]);
+                    res.add(list);
+                    l++;r--;
+                    // 去除重复情况
+                    while(l < r && (nums[l] == nums[l-1])) l++;
+                    while(l < r && (nums[r] == nums[r+1])) r--;
+                }else if(nums[l] + nums[r] < target) l++;
+                else r--;
+            }
+        }
+        return res;
+    }
+}
+```
+### 终极变形：n数之和等于k
+- 思路：回溯法
+```java
+
 ```
