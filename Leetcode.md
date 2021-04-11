@@ -42,9 +42,7 @@ class Solution {
 
 ### [剑指Offer16 数值的整数次方](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/)
 
--
-
-思路：[快速幂解析（二分法角度）](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/)
+- 思路：[快速幂解析（二分法角度）](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/)
 
 ```java
 class Solution {
@@ -67,9 +65,7 @@ class Solution {
 
 ### [剑指Offer26 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
 
--
-
-思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
+- 思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
 
 ```java
 class Solution {
@@ -360,4 +356,36 @@ class Solution {
 - 思路：回溯法
 ```java
 
+```
+### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
+- 回溯法：
+```java
+class Solution {
+    public List<List<Integer>> permute(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        List<Integer> tmp = new ArrayList<>();
+        perm(res,nums,tmp,0);
+        return res;
+    }
+    private static void perm(List<List<Integer>> res,int[] nums,List<Integer> tmp,int cur){
+        if(cur == nums.length){
+            // 这里如果放的是tmp，那么放的是tmp的引用，到最后的时候tmp一定会全部删除变成空集合
+            // 所以一定要new ArrayList<>(tmp)
+            res.add(new ArrayList<>(tmp));
+            return;
+        }
+        for(int i = cur;i < nums.length;i++){
+            tmp.add(nums[i]);
+            swap(nums,i,cur);   
+            perm(res,nums,tmp,cur+1);
+            tmp.remove(tmp.size()-1);
+            swap(nums,i,cur);
+        }
+    }
+    private static void swap(int[] nums, int i, int j) {
+        int tmp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = tmp;
+    }
+}
 ```

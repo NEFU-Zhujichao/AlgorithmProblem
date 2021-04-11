@@ -86,7 +86,8 @@ public class Solution {
 ### [NC105二分查找](https://www.nowcoder.com/practice/7bc4a1c7c371425d9faa9d1b511fe193?tpId=117&tqId=37829&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 
 - 思路：二分查找
-
+![](https://img-blog.csdnimg.cn/20210411161826297.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmVfenNx,size_16,color_FFFFFF,t_70) 
+![](https://img-blog.csdnimg.cn/20210411161826240.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmVfenNx,size_16,color_FFFFFF,t_70) 
 ```java
 public class Solution {
     public int upper_bound_(int n, int v, int[] a) {
@@ -103,7 +104,7 @@ public class Solution {
 }
 ```
 
-### [NC15=求二叉树的层序遍历](https://www.nowcoder.com/practice/04a5560e43e24e9db4595865dc9c63a3?tpId=117&tqId=37723&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
+### [NC15求二叉树的层序遍历](https://www.nowcoder.com/practice/04a5560e43e24e9db4595865dc9c63a3?tpId=117&tqId=37723&rp=1&ru=%2Factivity%2Foj&qru=%2Fta%2Fjob-code-high%2Fquestion-ranking&tab=answerKey)
 
 - 思路：大根放入队中，判断是否存在左右子树，存在则放入队中！**每次遍历的size为队的size**
 
