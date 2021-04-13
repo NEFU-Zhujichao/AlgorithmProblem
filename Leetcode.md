@@ -118,10 +118,39 @@ class Solution {
 }
 ```
 
-### [从数组中选出n个数之和为k](https://blog.csdn.net/codeTZ/article/details/51125109?utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs&dist_request_id=1328740.51642.16170958744643373&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7EBlogCommendFromMachineLearnPai2%7Edefault-1.baidujs)
-
+### [从无重复元素数组中选出n个数之和为k](https://leetcode-cn.com/problems/combination-sum/)
 - 思路：回溯法
-
+```java
+class Solution {
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        int n = candidates.length;
+        reback(res,candidates,n,0,0,target,new ArrayList<Integer>());
+        return res;
+    }
+    private void reback(List<List<Integer>> res,int[] candidates,int n,int sum,int cur,int target,ArrayList<Integer> tmp){
+        if(sum == target){
+            res.add(new ArrayList<Integer>(tmp));
+            return;
+        }
+        if(sum < target){
+            for(int i = cur;i < n;i++){
+                /* 剪枝
+                    1. 排序，遇到 rs > target 时就break
+                    2. 不排序，遇到 rs > target 时就continue
+                */
+                int rs = sum + candidates[i];
+                if(rs <= target){
+                tmp.add(candidates[i]);
+                reback(res,candidates,n,rs,i,target,tmp);
+                tmp.remove(tmp.size()-1);
+                } else break;
+            }
+        }
+    }
+}
+```
 ### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
 
 - [思路：](https://leetcode-cn.com/problems/spiral-matrix/solution/cxiang-xi-ti-jie-by-youlookdeliciousc-3/)
@@ -351,11 +380,6 @@ class Solution {
         return res;
     }
 }
-```
-### 终极变形：n数之和等于k
-- 思路：回溯法
-```java
-
 ```
 ### [46. 全排列](https://leetcode-cn.com/problems/permutations/)
 - 回溯法：
