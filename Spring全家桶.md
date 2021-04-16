@@ -21,10 +21,11 @@
   - 实例化Bean的时候会遍历BeanDefinitionMap
   - SpringBean的实例化和属性赋值是分两步来做的。
 - 设置对象属性（DI）：通过BeanWrapper提供的设置属性的接口完成属性依赖注入。
-- 注入Aware接口（BeanFactoryAware， 可以用这个方式来获取其它 Bean，ApplicationContextAware）：Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给bean。
+- 注入Aware接口：Spring会检测该对象是否实现了xxxAware接口，并将相关的xxxAware实例注入给bean。
   - ApplicationContextAware：注入ApplicationContext对象
   - BeanFactoryAware：注入BeanFactory对象
   - BeanNameAware：注入BeanName对象
+  - BeanClassLoaderAware：注入BeanClassLoader对象
 - BeanPostProcessor：自定义的处理（分**前置处理**和后置处理）。
 - InitializingBean：检查是否是InitializingBean，决定是否调用afterPropertiesSet()方法。
 - init-method：执行我们自己定义的初始化方法。
@@ -41,12 +42,12 @@
 - AOP：
   - 不同的模块（对象）间有时会出现公共的行为，这种公共的行为很难通过继承的方式来实现，如果用工具类的话也不利于维护，代码也显得异常繁琐。切面（AOP）的引入就是为了解决这类问题而生的，它要达到的效果是保证开发者在不修改源代码的前提下，为系统中不同的业务组件添加某些通用功能。
   - 这些行为都属于业务无关的，使用工具类嵌入的方式导致与业务代码紧藕合，很不合工程规范，代码可维护性极差!切面就是为了解决此类问题应运而生的，能做到相同功能的统一管理，对业务代码无侵入。
-- 当委托类(被代理类)需要实现接口时，走JDK动态代理生成代理类对象。若不需要实现接口，则使用cglib字节码技术生成代理类对象。
-- 代理分为静态代理和动态代理。动态代理又有 JDK 代理和 CGLib 代理两种。
-- 静态代理：由程序员创建代理类或特定工具自动生成源代码再对其编译。在编译时已经将接口，被代理类（委托类），代理类等确定下来，在程序运行前代理类的.class文件就已经存在了
+- 当目标类(被代理类)需要实现接口时，走JDK动态代理生成代理类对象。若不需要实现接口，则使用cglib字节码技术生成代理类对象。
+> 代理分为静态代理和动态代理。动态代理又有 JDK 代理和 CGLib 代理两种。  
+- 静态代理：由程序员创建代理类或特定工具自动生成源代码再对其编译。在编译时已经将接口，被代理类（目标类），代理类等确定下来，在程序运行前代理类的.class文件就已经存在了
 - 动态代理：在程序运行后通过反射创建生成字节码再由 JVM 加载而成。
 - 静态代理主要有两大劣势：
-  - 代理类只代理一个委托类（其实可以代理多个，但不符合单一职责原则），也就意味着如果要代理多个委托类，就要写多个代理（别忘了静态代理在编译前必须确定）。
+  - 代理类只代理一个目标类（其实可以代理多个，但不符合单一职责原则），也就意味着如果要代理多个委托类，就要写多个代理（别忘了静态代理在编译前必须确定）。
   - 第一点还不是致命的，再考虑这样一种场景：如果每个委托类的每个方法都要被织入同样的逻辑，比如说我要计算前文提到的每个委托类每个方法的耗时，就要在方法开始前，开始后分别织入计算时间的代码，那就算用代理类，它的方法也有无数这种重复的计算时间的代码。
 #### jdk动态代理实现方式：
 ```java
@@ -158,9 +159,9 @@ public class CGlibProxy {
 |    PROPAGATION_NESTED     | 如果当前存在事务，则在嵌套事务内执行。如果当前没有事务，则执行与PROPAGATION_REQUIRED类似的操作。 |
 ### Spring 如何解决循环依赖
 - 三级缓存
-  - singletonObjects：一级缓存，存储的是所有创建好了的单例Bean
-  - earlySingletonObjects：完成实例化，但是还未进行属性注入及初始化的对象
-  - singletonFactory：提前暴露的一个单例工厂，二级缓存中存储的就是从这个工厂中获取到的对象
+  - singletonObjects<BeanName,Bean>：一级缓存，存储的是所有创建好了的单例Bean
+  - earlySingletonObjects<BeanName,Bean>：完成实例化，但是还未进行属性注入及初始化的对象
+  - singletonFactory<BeanName,ObjectFactory>：提前暴露的一个单例工厂，二级缓存中存储的就是从这个工厂中获取到的对象
 ![](https://mmbiz.qpic.cn/mmbiz_png/tpEILlElskLZVx9XICtHkcNxLxMg0TuX9Qocjibiaz07hXItqjoWejaiauqu6uppr8hFv1T3U6RZdiaCOhSX5TW3iaA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1) 
 > 具体步骤：
 - Spring通过三级缓存解决了循环依赖，其中一级缓存为单例池（singletonObjects）,二级缓存为早期曝光对象earlySingletonObjects，三级缓存为早期曝光对象工厂（singletonFactories）。
@@ -181,19 +182,15 @@ public class CGlibProxy {
 | AB相互依赖（循环依赖） | 均采用构造器注入                                   | 否                     |
 | AB相互依赖（循环依赖） | A中注入B的方式为setter方法，B中注入A的方式为构造器 | 是                     |
 | AB相互依赖（循环依赖） | B中注入A的方式为setter方法，A中注入B的方式为构造器 | 否                     |
-### 为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？
-- 如果要使用二级缓存解决循环依赖，意味着所有Bean在实例化后就要完成AOP代理，这样违背了Spring设计的原则，Spring在设计之初就是通过**AnnotationAwareAspectJAutoProxyCreator**这个后置处理器来在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理。
-#### 解决过程
-> 1. **A对象实例化之后，属性注入之前，其实会把A对象放入到三级缓存中。key是BeanName，value是ObjectFactory**
-> 2. **等到A对象属性注入时，发现依赖B，又去实例化B时。B属性注入需要去获取A对象，这里就是从三级缓存中拿出ObjectFactory，从ObjectFactory中得到对应的Bean(就是对象A)**
-> 3. **把三级缓存的A记录干掉，然后放到二级缓存中。显然，二级缓存的key是BeanName，value是Bean(这里的Bean还没做完属性注入的相关工作)。等到完全初始化之后，就会把二级缓存给remove掉，塞到一级缓存中，我们getBean的时候，实际上拿到的是一级缓存的。** 
+#### 为什么要使用三级缓存呢？二级缓存能解决循环依赖吗？
+> 如果要使用二级缓存解决循环依赖，意味着所有Bean在实例化后就要完成AOP代理，这样违背了Spring设计的原则，Spring在设计之初就是通过**AnnotationAwareAspectJAutoProxyCreator**这个后置处理器来在Bean生命周期的最后一步来完成AOP代理，而不是在实例化后就立马进行AOP代理。
 ### SpringMVC执行流程
 ![SpringMVC执行流程](https://imgconvert.csdnimg.cn/aHR0cDovL2ltZy5ibG9nLmNzZG4ubmV0LzIwMTcxMTE1MTQxNDIzODAz?x-oss-process=image/format,png) 
 1. 用户发起请求到前端控制器（DispatcherServlet），该控制器会过滤出哪些请求可以访问Servlet、哪些不能访问。就是url-pattern的作用，并且会加载springmvc.xml配置文件。
 2. 前端控制器会找到处理器映射器（HandlerMapping），通过HandlerMapping完成url到controller映射的组件，简单来说，就是将在springmvc.xml中配置的或者注解的url与对应的处理类找到并进行存储，用map<url,handler>这样的方式来存储。
 3. HandlerMapping有了映射关系，并且找到url对应的处理器，HandlerMapping就会将其处理器（Handler）返回，在返回前，会加上很多拦截器。
 4. DispatcherServlet拿到Handler后，找到HandlerAdapter（处理器适配器），通过它来访问处理器，并执行处理器。
-5. 执行处理器。
+5. 执行处理器。Controller执行业务逻辑。
 6. 处理器会返回一个ModelAndView对象给HandlerAdapter。
 7. 通过HandlerAdapter将ModelAndView对象返回给前端控制器(DispatcherServlet)。
 8. 前端控制器请求视图解析器(ViewResolver)去进行视图解析，根据逻辑视图名解析成真正的视图(jsp)，其实就是将ModelAndView对象中存放视图的名称进行查找，找到对应的页面形成视图对象。
@@ -202,13 +199,17 @@ public class CGlibProxy {
 11. 通过第8步，通过名称找到了对应的页面，通过第10步，request域中有了所需要的数据，那么就能够进行视图渲染了。最后将其返回即可。
 ### MyBatis原理
 - sqlSessionFactoryBuilder加载mybatis核心配置文件生成sqlSessionFactory（单例）
-- 工厂模式生成sqlSession执行sql以及控制事务
+- sqlSessionFactory通过工厂模式生成sqlSession执行sql以及控制事务
 - Mybatis通过动态代理使Mapper（sql映射器）接口能运行起来即为接口生成代理对象将sql查询到结果映射成pojo 
 > **sqlSessionFactory构建过程：** 
 - 解析并读取配置中的xml创建Configuration对象 （单例）
 - 使用Configuration类去创建sqlSessionFactory（builder模式） 
 ### MyBatis如何防止SQL注入
-[MyBatis如何防止SQL注入](https://blog.csdn.net/renmengmeng520/article/details/100126301)
+[MyBatis如何防止SQL注入](https://blog.csdn.net/renmengmeng520/article/details/100126301)  
+代码中使用#的即输入参数在SQL中拼接的部分，传入参数后，打印出执行的SQL语句，会看到SQL参数都是问号占位。这是因为MyBatis启用了预编译功能，在SQL执行前，会先将上面的SQL发送给数据库进行编译；执行时，直接使用编译好的SQL，替换占位符“?”就可以了。因为SQL注入只能对编译过程起作用，所以这样的方式就很好地避免了SQL注入的问题。简单说，#{}是经过预编译的，是安全的；${}是未经过预编译的，仅仅是取变量的值，是非安全的，存在SQL注入。
+> 结论：
+- #{}：相当于JDBC中的PreparedStatement
+- ${}：是输出变量的值
 ### SpringBoot 配置文件的加载顺序
 1. 先去项目根目录找config文件夹下找配置文件件
 2. 再去根目录下找配置文件
@@ -225,12 +226,14 @@ public class CGlibProxy {
   - @ComponentScan：这个就是扫描注解的意思，默认扫描当前类所在的包及其子包下包含的注解，将@Controller/@Service/@Component/@Repository等注解加载到IOC容器中；
   - @EnableAutoConfiguration：这个注解表明启动自动装配，里面包含连个比较重要的注解@AutoConfigurationPackage和@Import。
     - @AutoConfigurationPackage和@ComponentScan一样，也是将主配置类所在的包及其子包里面的组件扫描到IOC容器中，但是区别是@AutoConfigurationPackage扫描@Entity、@MapperScan等第三方依赖的注解，@ComponentScan只扫描@Controller/@Service/@Component/@Repository这些常见注解。所以这两个注解扫描的对象是不一样的。
-    - @Import(AutoConfigurationImportSelector.class)是自动装配的核心注解，AutoConfigurationImportSelector.class中有个selectImports方法
-    - selectImports方法还调用了getCandidateConfigurations方法。
-    - @EnableAutoConfiguration注解通过@SpringBootApplication注解被间接的标记在了SpringBoot的启动类上，SpringApplication.run方法的内部就会执行selectImports方法，进而找到所有JavaConfig配置类全限定名对应的class，然后将所有自动配置类加载到IOC容器中。 
+    - @Import(AutoConfigurationImportSelector.class)是自动装配的核心注解，AutoConfigurationImportSelector.class中有个selectImports方法。
+      - selectImports方法还调用了getCandidateConfigurations方法。getCandidateConfigurations方法中，我们可以看下断言，说找不到META-INF/spring.factories，由此可见，这个方法是用来找META-INF/spring.factories文件的。我们可以定位到这个方法所在的类处于spring-boot-autoconfigure-.jar包中，其中spring.factories文件是一组组的key=value的形式，包含了key为EnableAutoConfiguration的全类名，value是一个AutoConfiguration类名的列表，以逗号分隔。
+  - @EnableAutoConfiguration注解通过@SpringBootApplication注解被间接的标记在了SpringBoot的启动类上，SpringApplication.run方法的内部就会执行selectImports方法，进而找到所有JavaConfig配置类全限定名对应的class，然后将所有自动配置类加载到IOC容器中。 
 - 那么这些类是如何获取默认属性值的呢？
   - 在XXXXAutoConfiguration类上标注了@EnableConfigurationProperties(XXXXProperties.class)
   - 在XXXXProperties类中的所有属性就是我们可以在application.yml中配置的属性
+- 所有的自动配置类都生效吗？
+  - 通过@ConditionOnXXX来标注到配置类上，然后对应响应的条件。只有当条件生效时自动配置才会生效。eg：@ConditionOnMissingBean
 > 总结：SpringBoot自动装配其实就找到xxxAutoConfiguration类，XXXAutoConfiguration这个类其实就是一个配置类，他把需要的类都加载的容器中，然后通过@EnableConfigurationProperties(xxxProperties.class)获得配置属性需要的值，但是还要进入这个类通过@ConfigurationProperties(prefix = “xxx”)来把配置文件中的配置导入进来。
 ###  SpringApplication
 1. 推断应用的类型是普通的项目还是Web项目。

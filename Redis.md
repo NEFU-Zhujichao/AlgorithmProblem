@@ -1,5 +1,5 @@
 # Redis面经
-> String、Hash、List、Set、ZSet、HyperLogLog、Geo、BitMap、Pub/Sub、**BloomFilter** 
+> String、Hash、List、Set、ZSet、HyperLogLog、Geo、BitMap、Pub/Sub、**BloomFilter**   
 > Redis采用的是基于内存的采用的是单线程模型的 KV 数据库，由C语言编写，官方提供的数据是可以达到100000+的QPS（每秒内查询次数）。
 ### 缓存击穿？缓存穿透？缓存雪崩
 - 缓存穿透：假设这样一个场景，我们数据库中的主键是自增的，然后黑客利用大量肉鸡模拟主键为**负数**的请求，所以这些请求都会使得数据库进行一次查询，大量请求可能会把数据库直接打崩。
