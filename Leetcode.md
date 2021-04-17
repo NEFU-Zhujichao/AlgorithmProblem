@@ -413,3 +413,44 @@ class Solution {
     }
 }
 ```
+### [98. 验证二叉搜索树](https://leetcode-cn.com/problems/validate-binary-search-tree/)
+- 思路：中序遍历树，保存中序遍历结果，若是升序数组，则为一棵BST
+```java
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return false;
+        ArrayList<Integer> res = new ArrayList<>();
+        inorder(root,res);
+        long tmp = -Long.MAX_VALUE;
+        boolean flag = true;
+        for(int i = 0;i < res.size();i++){
+            if(res.get(i) > tmp) tmp = res.get(i);
+            else {
+                flag = false;
+                break;
+            }
+        }
+        return flag;
+    }
+    private void inorder(TreeNode root,ArrayList<Integer> res){
+        if(root == null) return;
+        inorder(root.left,res);
+        res.add(root.val);
+        inorder(root.right,res);
+    }
+}
+```
+- 思路：递归判断左右子树是否满足每个树节点的值在(min,max)之间。
+```java
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return false;
+        return isValidBST(root,Long.MIN_VALUE,Long.MAX_VALUE);
+    }
+    public boolean isValidBST(TreeNode root,long min,long max){
+        if(root == null) return true;
+        if(root.val <= min || root.val >= max) return false;
+        return isValidBST(root.left,min,root.val) && isValidBST(root.right,root.val,max);
+    }
+}
+```
