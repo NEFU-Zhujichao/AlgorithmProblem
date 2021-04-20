@@ -454,3 +454,22 @@ class Solution {
     }
 }
 ```
+### [739. 每日温度](https://leetcode-cn.com/problems/daily-temperatures/)
+- 思路：单调减栈 栈里存放数组下标，每遇到大于栈中T[st.peek()]时，弹出栈，记录i-st.pop() 为弹出栈的res值。
+```java
+class Solution {
+    public int[] dailyTemperatures(int[] T) {
+        int n = T.length;
+        int[] res = new int[n];
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0;i < n;i++){
+            while(!st.isEmpty() && T[i] > T[st.peek()]){
+                int tmp = st.pop();
+                res[tmp] = i - tmp;
+            }
+            st.push(i);
+        }
+        return res;
+    }
+}
+```
