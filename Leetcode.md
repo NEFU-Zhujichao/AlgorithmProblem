@@ -1,11 +1,40 @@
 # 算法题(力扣高频TOP100)
-
+### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
+- 思路：双指针，用map存储字符是否存在，不断更新最大值。
+```java
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        int len = s.length();
+        if(len <= 1) return len;
+        HashMap<Character,Integer> map = new HashMap<>();
+        int max = 0,end = 0,i = 0,j = 0;
+        while (i <= j && j < len){
+            if(!map.containsKey(s.charAt(j))){
+                map.put(s.charAt(j),j);
+                if (max < map.size()){
+                    max = map.size();
+                    end = j;
+                }
+                j++;
+            }else {
+                while (s.charAt(i) != s.charAt(j)){
+                    map.remove(s.charAt(i));
+                    i++;
+                }
+                map.remove(s.charAt(i));
+                i++;
+            }
+        }
+        // end记录最大值的最大位置j，方便获取最长字串。
+        //System.out.println(s.substring(end-max+1,end+1));
+        return max;
+    }
+}
+```
 ### [11. 盛最多水的容器](https://leetcode-cn.com/problems/container-with-most-water/)
-
 - 思路：双指针。
-  ![](https://pic.leetcode-cn.com/a2a97349454ee3657a8a3d9db0399921894c7f581c2e9540d0e2c3df122fec95-Picture1.png)
-  ![](https://pic.leetcode-cn.com/239c53727f392398829ae835df2d4b8dce374954b2aac2e3745b3ff9c32d7a9f-Picture2.png)
-
+![](https://pic.leetcode-cn.com/a2a97349454ee3657a8a3d9db0399921894c7f581c2e9540d0e2c3df122fec95-Picture1.png)  
+![](https://pic.leetcode-cn.com/239c53727f392398829ae835df2d4b8dce374954b2aac2e3745b3ff9c32d7a9f-Picture2.png)  
 ```java
 class Solution {
     public int maxArea(int[] height) {
@@ -21,11 +50,8 @@ class Solution {
     }
 }
 ```
-
 ### [55. 跳跃游戏](https://leetcode-cn.com/problems/jump-game/)
-
 - 思路：跳就完事了。每次更新能跳到的最远距离。若是此时i大于max则无法到达，若max >= nums.length() - 1则能到达。
-
 ```java
 class Solution {
     public boolean canJump(int[] nums) {
@@ -39,11 +65,8 @@ class Solution {
     }
 }
 ```
-
 ### [剑指Offer16 数值的整数次方](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/)
-
 - 思路：[快速幂解析（二分法角度）](https://leetcode-cn.com/problems/shu-zhi-de-zheng-shu-ci-fang-lcof/solution/mian-shi-ti-16-shu-zhi-de-zheng-shu-ci-fang-kuai-s/)
-
 ```java
 class Solution {
     public double myPow(double x, int n) {
@@ -62,11 +85,8 @@ class Solution {
     }
 }
 ```
-
 ### [剑指Offer26 树的子结构](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/)
-
 - 思路：[递归查询左子树和右子树](https://leetcode-cn.com/problems/shu-de-zi-jie-gou-lcof/solution/mian-shi-ti-26-shu-de-zi-jie-gou-xian-xu-bian-li-p/)
-
 ```java
 class Solution {
     public boolean isSubStructure(TreeNode A, TreeNode B) {
@@ -74,7 +94,6 @@ class Solution {
         if (A.val == B.val && (help(A.left, B.left) && help(A.right, B.right))) return true;
         return isSubStructure(A.left, B) || isSubStructure(A.right, B);
     }
-
     private boolean help(TreeNode A, TreeNode B) {
         if (B == null) return true;
         if (A == null) return false;
@@ -83,12 +102,9 @@ class Solution {
     }
 }
 ```
-
 ### [5. 最长回文子串](https://leetcode-cn.com/problems/longest-palindromic-substring/)
-
 - 思路：从每个索引向两边扩展回文串，找到最长的。 时间复杂度：O(n^2)。
 - [多解题思路](https://leetcode-cn.com/problems/longest-palindromic-substring/solution/zhong-xin-kuo-san-dong-tai-gui-hua-by-liweiwei1419/)
-
 ```java
 class Solution {
     public String longestPalindrome(String s) {
@@ -105,7 +121,6 @@ class Solution {
         // maxLen.length() 最大长度
         return maxLen;
     }
-
     private String get(int left, int right, String A) {
         while (left >= 0 && right < A.length()) {
             if (A.charAt(left) == A.charAt(right)) {
@@ -117,7 +132,6 @@ class Solution {
     }
 }
 ```
-
 ### [从无重复元素数组中选出n个数之和为k](https://leetcode-cn.com/problems/combination-sum/)
 - 思路：回溯法
 ```java
@@ -152,18 +166,14 @@ class Solution {
 }
 ```
 ### [54. 螺旋矩阵](https://leetcode-cn.com/problems/spiral-matrix/)
-
 - [思路：](https://leetcode-cn.com/problems/spiral-matrix/solution/cxiang-xi-ti-jie-by-youlookdeliciousc-3/)
-
 1. 定义上下左右边界值
 2. 其次向右移动到最右，此时第一行因为已经使用过了，可以将其从图中删去，体现在代码中就是重新定义上边界
 3. 判断若重新定义后，上下边界交错，表明螺旋矩阵遍历结束，跳出循环，返回答案
 4. 若上下边界不交错，则遍历还未结束，接着向下向左向上移动，操作过程与第一，二步同理
 5. 不断循环以上步骤，直到某两条边界交错，跳出循环，返回答案
-
 ```java
 import java.util.Collections;
-
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
         List<Integer> res = new ArrayList<>();
@@ -182,15 +192,11 @@ class Solution {
     }
 }
 ```
-
 ### [NC127 最长公共子串](https://www.nowcoder.com/practice/f33f5adc55f444baa0e0ca87ad8a6aac?tpId=117&tab=answerKey)
-
 - 思路：经典dp flag数组记录该点由谁得到的
 - 子串是连续的，所以当两个字母不相等时，dp[i][j] = 0, 如果是子序列， dp[i][j] = Math.max(dp[i-1][j],dp[i][j-1]);
-
 ```java
 import java.util.*;
-
 public class Solution {
     public String LCS(String str1, String str2) {
         if (str1 == null || str2 == null || str1.equals("") || str2.equals("")) return "-1";
@@ -223,11 +229,8 @@ public class Solution {
     }
 }
 ```
-
 ### [1143. 最长公共子序列](https://leetcode-cn.com/problems/longest-common-subsequence/submissions/)
-
 - 思路：经典dp flag数组记录该点由谁得到的
-
 ```java
 class Solution {
     public int longestCommonSubsequence(String text1, String text2) {
@@ -275,36 +278,29 @@ class Solution {
         // 因为头节点有可能发生变化，使用虚拟头节点可以避免复杂的分类讨论
         ListNode dummyNode = new ListNode(-1);
         dummyNode.next = head;
-
         ListNode pre = dummyNode;
         // 第 1 步：从虚拟头节点走 left - 1 步，来到 left 节点的前一个节点
         for (int i = 0; i < left - 1; i++) {
             pre = pre.next;
         }
-
         // 第 2 步：从 pre 再走 right - left + 1 步，来到 right 节点
         ListNode rightNode = pre;
         for (int i = 0; i < right - left + 1; i++) {
             rightNode = rightNode.next;
         }
-
         // 第 3 步：切断出一个子链表
         ListNode leftNode = pre.next;
         ListNode curr = rightNode.next;
-
         // 注意：切断链接
         pre.next = null;
         rightNode.next = null;
-
         // 第 4 步：反转链表的子区间
         reverseLinkedList(leftNode);
-
         // 第 5 步：接回到原来的链表中
         pre.next = rightNode;
         leftNode.next = curr;
         return dummyNode.next;
     }
-
     private void reverseLinkedList(ListNode head) {
         ListNode pre = null,cur = head;
         while (cur != null) {
@@ -470,6 +466,60 @@ class Solution {
             st.push(i);
         }
         return res;
+    }
+}
+```
+### [148. 排序链表](https://leetcode-cn.com/problems/sort-list/)
+- 解答一：归并排序（递归法）
+- 归并排序 时间复杂度 O(nlongn) 空间复杂度：递归调用函数将带来O(logn)的空间复杂度
+![](https://pic.leetcode-cn.com/8c47e58b6247676f3ef14e617a4686bc258cc573e36fcf67c1b0712fa7ed1699-Picture2.png)
+- 解答二：归并排序（迭代法）
+- 
+```java
+class Solution {
+     public ListNode sortList(ListNode head) {
+        // 1、递归结束条件
+        if (head == null || head.next == null) {
+            return head;
+        }
+        // 2、找到链表中间节点并断开链表 & 递归下探
+        ListNode midNode = middleNode(head);
+        ListNode rightHead = midNode.next;
+        midNode.next = null;
+        ListNode left = sortList(head);
+        ListNode right = sortList(rightHead);
+        // 3、当前层业务操作（合并有序链表）
+        return mergeTwoLists(left, right);
+    }
+    //  找到链表中间节点（876. 链表的中间结点）
+    private ListNode middleNode(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode slow = head;
+        ListNode fast = head.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        return slow;
+    }
+    // 合并两个有序链表（21. 合并两个有序链表）
+    private ListNode mergeTwoLists(ListNode l1, ListNode l2) {
+        ListNode sentry = new ListNode(-1);
+        ListNode curr = sentry;
+        while(l1 != null && l2 != null) {
+            if(l1.val <= l2.val) {
+                curr.next = l1;
+                l1 = l1.next;
+            } else {
+                curr.next = l2;
+                l2 = l2.next;
+            }
+            curr = curr.next;
+        }
+        curr.next = l1 != null ? l1 : l2;
+        return sentry.next;
     }
 }
 ```
