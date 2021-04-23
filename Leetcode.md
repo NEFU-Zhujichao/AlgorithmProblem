@@ -1,4 +1,6 @@
 # 算法题(力扣高频TOP100)
+<< 左移1位相当于乘2 相当于二进制右面补0  
+   右移1位相当于除2 相当于二进制左面补0
 ### [3. 无重复字符的最长子串](https://leetcode-cn.com/problems/longest-substring-without-repeating-characters/)
 - 思路：双指针，用map存储字符是否存在，不断更新最大值。
 ```java
@@ -520,6 +522,96 @@ class Solution {
         }
         curr.next = l1 != null ? l1 : l2;
         return sentry.next;
+    }
+}
+```
+### [169. 多数元素](https://leetcode-cn.com/problems/majority-element/)
+- 进阶 [229. 求众数 II](https://leetcode-cn.com/problems/majority-element-ii/)
+- 思路： O(n) 时间复杂度 O(1) 空间复杂度 所以不能用map存值 应用**摩尔投票法**  
+摩尔投票法思路：  
+候选人(cand_num)初始化为nums[0]，票数count初始化为1。   
+当遇到与cand_num相同的数，则票数count = count + 1，否则票数count = count - 1。  
+当票数count为0时，更换候选人，并将票数count重置为1。  
+遍历完数组后，cand_num即为最终答案。  
+为何这行得通呢？  
+投票法是遇到相同的则票数 + 1，遇到不同的则票数 - 1。  
+且“多数元素”的个数> ⌊ n/2 ⌋，其余元素的个数总和<= ⌊ n/2 ⌋。  
+因此“多数元素”的个数 - 其余元素的个数总和 的结果 肯定 >= 1。  
+这就相当于每个“多数元素”和其他元素 两两相互抵消，抵消到最后肯定还剩余至少1个“多数元素”。  
+无论数组是1 2 1 2 1，亦或是1 2 2 1 1，总能得到正确的候选人。
+```java
+class Solution {
+    public int majorityElement(int[] nums) {
+        int res = nums[0];
+        int count = 1;
+        // 摩尔投票
+        for(int i = 1;i < nums.length;i++){
+            if(count == 0) res = nums[i];
+            if(res == nums[i]) count++;
+            else count--;
+        }
+        return res;
+    }
+}
+```
+### [229. 求众数 II](https://leetcode-cn.com/problems/majority-element-ii/)
+- 思路：摩尔投票 维护两个数字 然后最后统计两个数字是否都大于 n/3 大于则返回，反之不返回。
+```java
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        List<Integer> list = new ArrayList<>();
+        int n = nums.length;
+        if(n < 2){
+            list.add(nums[0]);
+            return list;
+        }
+        int res1 = 0,res2 = 0;
+        int cnt1 = 0,cnt2 = 0;
+        for(int i = 0;i < n;i++){
+            if(nums[i] == res1) cnt1++;
+            else if(nums[i] == res2) cnt2++;
+            else if(cnt1 == 0){
+                cnt1++;
+                res1 = nums[i];
+            }else if(cnt2 == 0){
+                cnt2++;
+                res2 = nums[i];
+            }else{
+                cnt1--;
+                cnt2--;
+            }
+        }
+        cnt1 = 0;cnt2 = 0;
+        for(int num : nums){
+            if(num == res1) cnt1++;
+            else if(num == res2) cnt2++;
+        }
+        if(cnt1 > n/3)
+        list.add(res1);
+        if(cnt2 > n/3)
+        list.add(res2);
+        return list;
+    }
+}
+```
+### [198. 打家劫舍](https://leetcode-cn.com/problems/house-robber/)
+- 思路： 简单dp (记录自己做出简单dp的快乐！！！)
+  - 只有一个房子时 return nums[0];
+  - 两个房子时 return max(nums[0],nums[1]);
+  - 多个房子时： dp[i] = max(dp[i-1],dp[i-2]+nums[i]); 此处的房子可以由前一座房子的最大价值或者前两个房子的最大价值加上此房子的值而来，所以取两者的最大值。
+```java
+class Solution {
+    public int rob(int[] nums) {
+        int n = nums.length;
+        if (n == 1) return nums[0];
+        if (n == 2) return Math.max(nums[0], nums[1]);
+        int[] dp = new int[n];
+        dp[0] = nums[0];
+        dp[1] = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < n; i++) {
+            dp[i] = Math.max(dp[i - 2] + nums[i], dp[i - 1]);
+        }
+        return dp[n - 1];
     }
 }
 ```
