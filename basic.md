@@ -1,7 +1,7 @@
 # Java基础面经
 ### ==和equals比较
-- ==对比的是栈中的值。**基本数据类型比较的是变量值，引用类型是堆中内存对象的地址。**
-- Object默认equals方法为==比较。但是我们可以重写equals方法。**String类重写了equals方法，如果说我们两个字符串只要是每个位置对应的字符相同equals方法就会返回true。**
+==对比的是栈中的值。**基本数据类型比较的是变量值，引用类型是堆中内存对象的地址。**  
+Object默认equals方法为==比较。但是我们可以重写equals方法。**String类重写了equals方法，如果说我们两个字符串只要是每个位置对应的字符相同equals方法就会返回true。**
 ### String StringBuffer StringBuilder 区别和使用场景
 - String是final修饰的，是不可变的，每次操作都会生成一个新对象。
 - StringBuffer StringBuilder都是在原对象上操作的。
@@ -18,20 +18,19 @@
 - 重写equals之后两个对象相同了，所以要让他们两个对象的hashcode也相同，保证前提条件是成立的。所以要按照一定的方式保证他俩的hashcode值相同，如果不重写的话默认是堆中内存存储地址，那么他俩一定不相同。(因为是两个对象，所以内存地址一定不相同)
 - 虽然通过重写equals方法使得逻辑上姓名和年龄相同的两个对象被判定为相等的对象（跟String类类似），但是要知道默认情况下，hashCode方法是将对象的存储地址进行映射。生成的是两个对象，它们的存储地址肯定不同。
 ### SimpleDateFormat线程不安全
-> 可以看到，多个线程之间共享变量calendar，并修改calendar。因此在多线程环境下，当多个线程同时使用相同的SimpleDateFormat对象（如static修饰）的话，如调用format方法时，多个线程会同时调用calender.setTime方法，导致time被别的线程修改，因此线程是不安全的。 此外，parse方法也是线程不安全的，parse方法实际调用的是CalenderBuilder的establish来进行解析，其方法中主要步骤不是原子操作。
-**解决方案：** 
+> 可以看到，多个线程之间共享变量calendar，并修改calendar。因此在多线程环境下，当多个线程同时使用相同的SimpleDateFormat对象（如static修饰）的话，如调用format方法时，多个线程会同时调用calender.setTime方法，导致time被别的线程修改，因此线程是不安全的。 此外，parse方法也是线程不安全的，parse方法实际调用的是CalenderBuilder的establish来进行解析，其方法中主要步骤不是原子操作。  
+
+**解决方案：**
 - 将SimpleDateFormat定义成局部变量
-- 加一把线程同步锁：synchronized(lock)
+- 加一把线程同步锁：synchronized、lock
 - 使用ThreadLocal，每个线程都拥有自己的SimpleDateFormat对象副本。如：
 ```java
-public class Main{
-    private static final ThreadLocal<SimpleDateFormat> THREAD_LOCAL = new ThreadLocal<SimpleDateFormat>() {
-        @Override
-        protected SimpleDateFormat initialValue() {
-            return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        }
-    };  
-}
+private static final ThreadLocal<SimpleDateFormat> THREAD_LOCAL=new ThreadLocal<SimpleDateFormat>(){
+    @Override
+    protected SimpleDateFormat initialValue(){
+        return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+    }
+};
 ```
 ### 强引用（StrongReference） 软引用（SoftReference） 弱引用（WeakReference） 虚引用（PhantomReference）
 1. 强引用  

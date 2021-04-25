@@ -615,3 +615,49 @@ class Solution {
     }
 }
 ```
+### [210. 课程表 II](https://leetcode-cn.com/problems/course-schedule-ii/)
+- 思路：拓扑排序 + bfs
+- 用List<List<Integer>>存有向边，indeg数组存每个点的入度。假设 [[1],[3],[3],[]] 代表的是 0 -> 1 1 -> 3 2 -> 3  0的入度为0 1的入度为1 2的入度为0 3的入度为2。bfs初始把入度为0的节点入队开始bfs，每次队首取出的点，遍历以这个点为起点的点，遍历的每个点都相应的入度-1。用res记录队中的弹出的值，如果弹出的值的长度等于总课程的数量，那么认为能够全部修完。否则就是出现了环，无法完成排课。
+```java
+class Solution {
+    List<List<Integer>> edges;
+    int[] indeg;
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        // 构建点
+        edges = new ArrayList<List<Integer>>();
+        for (int i = 0; i < numCourses; ++i) {
+            edges.add(new ArrayList<Integer>());
+        }
+        indeg = new int[numCourses];
+        // 构建有向边，从 index -> x
+        for (int[] info : prerequisites) {
+            edges.get(info[1]).add(info[0]);
+            // 存入度
+            ++indeg[info[0]];
+        }
+        Queue<Integer> queue = new LinkedList<Integer>();
+        // 把入度为0的节点入队
+        for (int i = 0; i < numCourses; ++i) {
+            if (indeg[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        // 开始bfs
+        int[] res = new int[numCourses];
+        int cnt = -1;
+        while (!queue.isEmpty()) {
+            int u = queue.poll();
+            res[++cnt] = u;
+            for (int v: edges.get(u)) {
+                --indeg[v];
+                if (indeg[v] == 0) {
+                    queue.offer(v);
+                }
+            }
+        }
+        if(cnt != numCourses-1) 
+        return new int[0];
+        return res;
+    }
+}
+```
