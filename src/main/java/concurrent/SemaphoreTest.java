@@ -26,7 +26,7 @@ public class SemaphoreTest {
                         semaphore.acquire();
                         System.out.println(no +":号车可通行");
                         //模拟车辆通行耗时
-                        Thread.sleep(random.nextInt(5000));
+                        Thread.sleep(random.nextInt(3000));
                         //释放许可
                         semaphore.release();
                     } catch (InterruptedException e) {

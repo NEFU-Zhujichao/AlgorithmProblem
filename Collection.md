@@ -1,5 +1,5 @@
 # 集合框架面经总结
-### Collection接口下有 List(ArrayList,LinkedList) Set(HashSet) Map接口下有(HashMap,TreeMap)
+### Collection接口下有 List(ArrayList,LinkedList) Queue(BlockingQueue) Set(HashSet) Map接口下有(HashMap,TreeMap)
 - ArrayList：底层数据结构为数组，它初始化的时候数据量是0，当你add的时候默认会变成10，它的扩容机制是每次扩容容量是它之前容量的1.5倍，查找访问通过索引下标，速度快，增删元素的效率低，线程不安全。 当遇到线程安全问题时，考虑使用JUC包下的CopyOnWriteArrayList。如果使用尾插法并且指定初始容量可以极大提高它的性能。
 - LinkedList： 底层数据结构为双向链表，提供头插和尾插两种方式，适合插入删除频繁的情况下，内部维护了链表的长度。
 - HashMap：1.7 底层数据结构 数组加单链表，数据节点是一个Entry内部类。发生hash冲突时，新元素插入到链表头中，即新元素总是添加到数组中，旧元素移动到链表中。利用头插法进行resize() ，扩容时调用resize()然后又调用了transfer()方法，把里面的Entry进行rehash()。在扩容resize()过程中在将旧数组上的数据转移到新数组上时，转移操作 = 按旧链表的正序遍历链表、在新链表的头部依次插入，即在转移数据、扩容后，容易出现链表逆序的情况 。多线程下resize()容易出现死循环，此时若(多线程)并发执行 put()操作，一旦出现扩容情况，则容易出现环形链表，从而在获取数据、遍历链表时 形成死循环，即死锁的状态 。
