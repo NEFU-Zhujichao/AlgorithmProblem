@@ -168,7 +168,7 @@ public class CGlibProxy {
 - 当A、B两个类发生循环引用时，在A完成实例化后，就使用实例化后的对象去创建一个对象工厂，并添加到三级缓存中，如果A被AOP代理，那么通过这个工厂获取到的就是A代理后的对象，如果A没有被AOP代理，那么这个工厂获取到的就是A实例化的对象。
 - 当A进行属性注入时，会去创建B，同时B又依赖了A，所以创建B的同时又会去调用getBean(a)来获取需要的依赖，此时的getBean(a)会从缓存中获取：
   - 第一步，先获取到三级缓存中的工厂；
-  - 第二步，调用对象工工厂的getObject方法来获取到对应的对象，得到这个对象后将其注入到B中。紧接着B会走完它的生命周期流程，包括初始化、后置处理器等。
+  - 第二步，调用对象工厂的getObject方法来获取到对应的对象，得到这个对象后将其注入到B中。紧接着B会走完它的生命周期流程，包括初始化、后置处理器等。
 - 当B创建完后，会将B再注入到A中，此时A再完成它的整个生命周期。至此，循环依赖结束！
 > 思考题：为什么在下表中的第三种情况的循环依赖能被解决，而第四种情况不能被解决呢？ 
 - 提示：Spring在创建Bean时默认会根据自然排序进行创建，所以A会先于B进行创建。
@@ -215,8 +215,7 @@ public class CGlibProxy {
 2. 再去根目录下找配置文件
 3. 去resources下找config文件夹下找配置文件
 4. 去resources下找配置文件
-![官网加载顺序](https://img-blog.csdnimg.cn/20181123162045737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70) 
-![本地项目测试](https://img-blog.csdnimg.cn/20181123175928348.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70)
+![官网加载顺序](https://img-blog.csdnimg.cn/20181123162045737.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2Y2NDEzODU3MTI=,size_16,color_FFFFFF,t_70)
 ###  SpringBoot 自动装配原理
 [SpringBoot自动装配原理](https://blog.csdn.net/qq_36986015/article/details/107488437) 
 > SpringBoot项目无需各种配置文件，一个main方法，就能把项目启动起来。SpringBoot通过main方法启动SpringApplication类的静态方法run()来启动项目。
