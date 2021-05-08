@@ -9,13 +9,13 @@
 - IOC：控制反转：将对象的创建权，由Spring管理。
 - DI（依赖注入）：在Spring创建对象的过程中，把对象依赖的属性注入到类中。 
 ---
-[Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142)  
-![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 ### Spring IOC 初始化流程
 - resource定位：即寻找用户定义的bean资源，由 ResourceLoader通过统一的接口Resource接口来完成beanDefinition载入
 - BeanDefinitionReader读取、解析Resource定位的资源 成BeanDefinition 载入到ioc中（通过HashMap进行维护BeanDefinition）。
 - BeanDefinition注册：即向IOC容器注册这些BeanDefinition， 通过BeanDefinitionRegistry实现。
 ### Bean的生命周期
+[Bean的实例化过程源码debug](https://blog.csdn.net/qq_18433441/article/details/81866142)  
+![Bean的实例化过程图解](https://img-blog.csdn.net/20180820100800644?watermark/2/text/aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3FxXzE4NDMzNDQx/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70)
 - 实例化Bean：Ioc容器通过获取BeanDefinition对象中的信息进行实例化，实例化对象被包装在BeanWrapper对象中。
   - Spring使用BeanDefinition来装载着我们给Bean定义的元数据
   - 实例化Bean的时候会遍历BeanDefinitionMap
@@ -123,7 +123,7 @@ public class CGlibProxy {
    public static void main(String[] args) {
        //创建Enhancer对象，类似于JDK动态代理的Proxy类，下一步就是设置几个参数
        Enhancer enhancer = new Enhancer();
-       //设置目标类的字节码文件
+       //设置代理类的父类，即目标类
        enhancer.setSuperclass(RealSubject.class);
        //设置回调函数
        enhancer.setCallback(new MyMethodInterceptor());
