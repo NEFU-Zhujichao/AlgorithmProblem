@@ -46,5 +46,10 @@ private static final ThreadLocal<SimpleDateFormat> THREAD_LOCAL=new ThreadLocal<
 **虚引用主要用来跟踪对象被垃圾回收的活动**。  
 **虚引用与软引用和弱引用的一个区别在于**： 虚引用必须和引用队列（ReferenceQueue）联合使用。当垃圾回收器准备回收一个对象时，如果发现它还有虚引用，就会在回收对象的内存之前，把这个虚引用加入到与之关联的引用队列中。程序可以通过判断引用队列中是否已经加入了虚引用，来了解被引用的对象是否将要被垃圾回收。程序如果发现某个虚引用已经被加入到引用队列，那么就可以在所引用的对象的内存被回收之前采取必要的行动。    
 特别注意，在程序设计中一般很少使用弱引用与虚引用，使用软引用的情况较多，**这是因为软引用可以加速 JVM 对垃圾内存的回收速度，可以维护系统的运行安全，防止内存溢出（OutOfMemory）等问题的产生。**
-
+### 序列化与反序列化基础知识
+[序列化与反序列化基础知识](https://blog.csdn.net/litianxiang_kaola/article/details/100097019?utm_term=%E4%B8%BA%E4%BB%80%E4%B9%88%E6%9C%89%E4%BA%9B%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8D%E9%9C%80%E8%A6%81%E5%AE%9E%E7%8E%B0%E6%8E%A5%E5%8F%A3&utm_medium=distribute.pc_aggpage_search_result.none-task-blog-2~all~sobaiduweb~default-1-100097019&spm=3001.4430)
+- 序列化和反序列化
+- 什么时候需要用到序列化和反序列化呢?
+- 实现序列化和反序列化为什么要实现Serializable接口?
+- 实现Serializable接口就算了, 为什么还要显示指定serialVersionUID的值?
    
