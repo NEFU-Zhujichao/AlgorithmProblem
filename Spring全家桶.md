@@ -101,8 +101,8 @@ public class ProxyFactory {
 > public static Object newProxyInstance(ClassLoader loader,
 >                                       Class<?>[] interfaces,
 >                                       InvocationHandler h);
-> - loader: 代理类的ClassLoader，最终读取动态生成的字节码，并转成 java.lang.Class 类的一个实例（即类），通过此实例的 newInstance() 方法就可以创建出代理的对象.
-> - interfaces: 委托类实现的接口，JDK 动态代理要实现所有的委托类的接口.
+> - loader: 目标类的ClassLoader，最终读取动态生成的字节码，并转成 java.lang.Class 类的一个实例（即类），通过此实例的 newInstance() 方法就可以创建出代理的对象.
+> - interfaces: 目标类实现的接口，JDK 动态代理要实现所有的委托类的接口.
 > - InvocationHandler: 委托对象所有接口方法调用都会转发到 InvocationHandler.invoke()，在 invoke() 方法里我们可以加入任何需要增强的逻辑 主要是根据委托类的接口等通过反射生成的。
 ---
 > 由于动态代理是程序运行后才生成的，哪个委托类需要被代理到，只要生成动态代理即可，避免了静态代理那样的硬编码，另外所有委托类实现接口的方法都会在 Proxy 的 InvocationHandler.invoke() 中执行，这样如果要统计所有方法执行时间这样相同的逻辑，可以统一在 InvocationHandler 里写， 也就避免了静态代理那样需要在所有的方法中插入同样代码的问题，代码的可维护性极大的提高了。
