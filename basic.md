@@ -8,6 +8,17 @@ Object默认equals方法为==比较。但是我们可以重写equals方法。**S
 - StringBuilder线程不安全。StringBuffer是线程安全的，StringBuffer的方法都是synchronized修饰的。
 - 性能：StringBuilder>StringBuffer>String
 - 场景：优先使用StringBuilder，如果这个字符串作为共享变量在多线程环境下使用时，若要保证结果正确则使用StringBuffer。若字符串不会改动，则使用String。
+### 重写和重载区别
+> 重写 总结：  
+1.发生在父类与子类之间  
+2.方法名，参数列表，返回类型（除过子类中方法的返回类型是父类中返回类型的子类）必须相同 eg: 父类返回Object，子类可以返回Integer  
+3.访问修饰符的限制一定要大于被重写方法的访问修饰符（public>protected>default>private)eg: 父类是protected，子类可以是public，private方法不能被重写。
+4.重写方法一定不能抛出新的检查异常或者比被重写方法申明更加宽泛的检查型异常。eg: 父类是Exception，子类是RuntimeException。
+
+> 重载 总结：  
+1.重载是一个类中多态性的一种表现  
+2.重载要求同名方法的参数列表不同(参数类型，参数个数甚至是参数顺序)  
+3.重载的时候，返回值类型可以相同也可以不相同。无法以返回型别作为重载函数的区分标准(如果只有返回值类型不同，那么不可以进行重载)
 ### 双亲委派模型
 ![](https://img-blog.csdnimg.cn/20210415162151887.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L2xvdmVfenNx,size_16,color_FFFFFF,t_70#pic_center)
 ### private的意义是什么
