@@ -4,10 +4,16 @@ SELECT * FROM table LIMIT 5,10; //检索记录行6-15
 ### 数据库三大范式
 **第一范式1NF**：  
 数据表中的每一列(字段)，必须是不可拆分的最小单元，也就是确保每一列的原子性，而不是集合。eg: address 可以再分为省、市、地区(县)、街道、详细地址，违反了第一范式。  
-**第二范式2NF**：
+**第二范式2NF**：  
 满足1NF的基础上，要求：表中的所有列，都必需依赖于主键，而不能有任何一列与主键没有关系（一个表只描述一件事情）。第二范式消除表的无关数据。eg: 此表中，天气和用户没啥关系，也就不存在依赖关系，所以不符合第二范式。正确的做法应该删除此列，如有其他需要可单独存在一张表中。  
 **第三范式3NF**：  
 满足2NF的基础上，任何非主属性不依赖于其它非主属性（在2NF基础上消除传递依赖）（也表明不允许数据存在冗余的现象）eg: 一个订单表，字段从左至右以此是：订单id、买家id、买家名称、买家性别、买家年龄、订单状态。其中字段buyer_name、buyer_gender、buyer_age 是依赖于字段 buyer_info_id，违反第三范式。
+### 自增主键的优点
+数据库中存储的基本单位叫做页(下面以mysql innodb引擎为例)  
+![](https://upload-images.jianshu.io/upload_images/18656860-99a303a587ca6910.png?imageMogr2/auto-orient/strip|imageView2/2/w/934/format/webp)  
+其中User Records 是已经存储的数据（UR），Free Space 是空闲空间(FS)，Infimum + Supremum是最小记录和最大记录（一遍是主键id），当不断插入数据时，UR 不变变大，FS逐渐变小，最大最小记录也随之更新，当FR空间不能再插入新的数据时，此时就发生页分裂，产生新的页挂载当前页后面，逐渐演变成下面的结构  
+![](https://upload-images.jianshu.io/upload_images/18656860-1dddebbf496f024b.png?imageMogr2/auto-orient/strip|imageView2/2/w/1092/format/webp)  
+**如果不用自增主键，那么产生页分裂将难以维护，因为随时有可能从中间插入，这也就意味着整个页链表的更新，性能相比自增主键的话其实性能差距就很大。**
 ### [深入理解 MySQL事务](https://blog.csdn.net/qq_35246620/article/details/61200815?utm_source=app&app_version=4.5.8)
 ### 什么是索引
 官方介绍索引是帮助MySQL高效获取数据的数据结构。更通俗的说，数据库索引好比是一本书前面的目录，能加快数据库的查询速度。  
