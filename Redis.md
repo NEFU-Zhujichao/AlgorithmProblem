@@ -59,7 +59,7 @@ Redis 6.0中的多线程，也只是针对处理网络请求过程采用了多�
 9. 削峰填谷：当秒杀数量很大时，可以把秒杀请求放到MQ，一点一点去消费就好了。
 ![](https://mmbiz.qpic.cn/mmbiz_png/uChmeeX1FpwWonxxyNO4ibGpUZTVdpQXcAm1xLfv38BKET1ic2SgIhWPUtRXEnuztzoPIRn1KRGIicaY9gicHP0m2g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1)
 ### Redis如何设置分布式锁
-先拿setnx来争抢锁，抢到之后，再用expire给锁加一个过期时间防止锁忘记了释放。**可以同时把setnx和expire合成一条指令来用的！保证指令的原子性。**  
+先拿setnx来争抢锁，抢到之后，再用expire给锁加一个过期时间防止锁忘记了释放。**可以同时把setnx和expire合成一条指令来用的！保证指令的原子性。** SET lock uuid EX 10 NX  
 为了防止redis的锁被别人释放，通常会将value设置为uuid或者线程id等这种唯一标识的值，来保证自己的锁是自己释放的。  
 当释放锁时，先会判断锁是不是自己的，然后去释放锁。因为这两个操作不是原子性的，所以这个过程在多线程情况下可能会出问题。**所以通常会将这两个命令写到lua脚本中执行，这样能够保证指令的原子性。**
 ### 使用过Redis做异步队列么，你是怎么用的？
